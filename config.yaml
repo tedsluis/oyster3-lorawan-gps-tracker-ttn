@@ -1,0 +1,904 @@
+---
+config:
+# Downlink Port 1: Set Trip Parameters
+  downlink1:
+    - name: 0.0 - 0.6 Downlink sequence number (reported in acknowledgement)
+      type: integer
+      value: 1
+      byte: 0
+      bit: 0
+      length: 7
+    - name: 0.7 Ignore V1 parameters on Oyster 3, default 0 (apply closest match)
+      type: boolean
+      value: false
+      byte: 0
+      bit: 7
+      length: 1
+    - name: 1 Max time between fix attempts out of trip ('heartbeat'), 1-127= 1-127 mins, 129-255= 1-127 hours, default 24 hours.
+      type: integer
+      value: 152
+      byte: 1
+      length: 1
+    - name: 2 Trip end timeout, LSb = 10s without accelerometer detecting movement, 0 disables trip tracking entirely (heartbeats only), default 5 mins.
+      type: integer
+      value: 30 # 5 * 60 / 10
+      byte: 2
+      length: 1
+    - name: 3 Time between fix attempts in-trip during work hours, 1-127= 1-127 seconds, 129-255= 1-127 minutes, 0 or 128 disables, default 10 mins.
+      type: integer
+      value: 138 # 129 + 9
+      byte: 3
+      length: 1
+    - name: 4 Time between fix attempts in-trip after hours, 1-127= 1-127 seconds, 129-255= 1-127 minutes, 0 or 128 disables, default 10 mins.
+      type: integer
+      value: 138 # 129 + 9
+      byte: 4
+      length: 1
+    - name: 5.0 Fix on start of trips during work hours, default true.
+      type: boolean
+      value: true
+      byte: 5
+      bit: 0
+      length: 1
+    - name: 5.1 Fix on end of trips during work hours, default true.
+      type: boolean
+      value: true
+      byte: 5
+      bit: 1
+      length: 1
+    - name: 5.2 Fix on start of trips after hours, default true.
+      type: boolean
+      value: true
+      byte: 5
+      bit: 2
+      length: 1
+    - name: 5.3 Fix on end of trips after hours, default true.
+      type: boolean
+      value: true
+      byte: 5
+      bit: 3
+      length: 1
+    - name: 5.4 Optimise GNSS for trip tracking (download all ephemerides), default true.
+      type: boolean
+      value: true
+      byte: 5
+      bit: 4
+      length: 1
+    - name: 5.5 V1 Disable stats messages (Uplinks 3 and 31), default 0 (send both).
+      type: boolean
+      value: false
+      byte: 5
+      bit: 5
+      length: 1
+    - name: 5.6 Disable wakeup filtering during work hours, 1= only apply accelerometer wakeup threshold and count, 0= apply threshold, count, and filter, default 0
+      type: boolean
+      value: false
+      byte: 5
+      bit: 6
+      length: 1
+    - name: 5.7 Disable wakeup filtering after hours, 1= only apply accelerometer wakeup threshold and count, 0= apply threshold, count, and filter, default 0
+      type: boolean
+      value: false
+      byte: 5
+      bit: 7
+      length: 1
+    - name: 6 V1 Accelerometer wakeup threshold, 1-8= 63-504 mG, default 126 mG.
+      type: integer
+      value: 2 # 126 / 63
+      byte: 6
+      length: 1
+    - name: 7 V1 Accelerometer wakeup count, 1-12= 80-960 ms, default 80 ms
+      type: integer
+      value: 1
+      byte: 7
+      length: 1
+
+# Downlink Port 2: Set After-Hours 1
+  downlink2:
+    - name: 0.0 - 0.6 Downlink sequence number (reported in acknowledgement)
+      type: integer
+      value: 1
+      byte: 0
+      bit: 0
+      length: 7
+    - name: 0.7 Reserved, set to zero
+      type: boolean
+      value: 0
+      byte: 0
+      bit: 7
+      length: 1
+    - name: 1 Start of after-hours period on Monday, LSb = 7m30s since 00:00 local time, setting to end time indicates no after-hours period, default 0
+      type: integer
+      value: 0
+      byte: 1
+      length: 1
+    - name: 2 End of after-hours period on Monday, LSb = 7m30s since 00:00 local time, setting to start time + 1 indicates a 7m30s after-hours period, set start time to 00:00 and end time to 24:00 to indicate the whole day is after-hours, default 0
+      type: integer
+      value: 0
+      byte: 2
+      length: 1
+    - name: 3 Start of after-hours period on Tuesday, see above
+      type: integer
+      value: 0
+      byte: 3
+      length: 1
+    - name: 4 End of after-hours period on Tuesday, see above
+      type: integer
+      value: 0
+      byte: 4
+      length: 1
+    - name: 5 Start of after-hours period on Wednesday, see above
+      type: integer
+      value: 0
+      byte: 5
+      length: 1
+    - name: 6 End of after-hours period on Wednesday, see above
+      type: integer
+      value: 0
+      byte: 6
+      length: 1
+    - name: 7 Start of after-hours period on Thursday, see above
+      type: integer
+      value: 0
+      byte: 7
+      length: 1
+    - name: 8 End of after-hours period on Thursday, see above
+      type: integer
+      value: 0
+      byte: 8
+      length: 1
+
+# Downlink Port 3: Set After-Hours 2
+  downlink3:
+    - name: 0.0 - 0.6 Downlink sequence number (reported in acknowledgement)
+      type: integer
+      value: 1
+      byte: 0
+      bit: 0
+      length: 7
+    - name: 0.7 Reserved, set to zero
+      type: boolean
+      value: 0
+      byte: 0
+      bit: 7
+      length: 1
+    - name: 1 Start of after-hours period on Friday, LSb = 7m30s since 00:00 local time, setting to end time indicates no after-hours period, default 0
+      type: integer
+      value: 0
+      byte: 1
+      length: 1
+    - name: 2 End of after-hours period on Friday, LSb = 7m30s since 00:00 local time, setting to start time + 1 indicates a 7m30s after-hours period, set start time, to 00:00 and end time to 24:00 to indicate the whole day is after-hours, default 0
+      type: integer
+      value: 0
+      byte: 2
+      length: 1
+    - name: 3 Start of after-hours period on Saturday, see above
+      type: integer
+      value: 0
+      byte: 3
+      length: 1
+    - name: 4 End of after-hours period on Saturday, see above
+      type: integer
+      value: 0
+      byte: 4
+      length: 1
+    - name: 5 Start of after-hours period on Sunday, see above
+      type: integer
+      value: 0
+      byte: 5
+      length: 1
+    - name: 6 End of after-hours period on Sunday, see above
+      type: integer
+      value: 0
+      byte: 6
+      length: 1
+
+# Downlink Port 4: Set Time Zone
+  downlink4:
+    - name: 0.0 - 0.6 Downlink sequence number (reported in acknowledgement)
+      type: integer
+      value: 1
+      byte: 0
+      bit: 0
+      length: 7
+    - name: 0.7 - 1.1 Reserved, set to zero
+      type: integer
+      value: 000B
+      byte: 0
+      bit: 7
+      length: 3
+    - name: 1.2 - 2.1 Offset of normal time zone from UTC, LSb = 15 minutes, signed, default 0
+      type: signed-integer
+      value: 0
+      byte: 0
+      bit: 7
+      length: 8
+    - name: 2.2 - 2.5 Daylight saving time shift, LSb = 15 minutes, 0 disables, default 0
+      type: integer
+      value: 0
+      byte: 2
+      bit: 2
+      length: 4
+    - name: 2.6 - 3.0 Start of DST Nth day of month, 1= First day, ..., 5= Fifth day, 6= Last day, 0= Use absolute date instead of relative ‘2nd Sunday of October’ style
+      type: integer
+      value: 0
+      byte: 2
+      bit: 6
+      length: 3
+    - name: 3.1 - 3.5 1-7= Monday-Sunday, or 1-31= Day of month (absolute date), local time
+      type: integer
+      value: 0
+      byte: 3
+      bit: 1
+      length: 5
+    - name: 3.6 - 4.1 1-12= January-December
+      type: integer
+      value: 0
+      byte: 3
+      bit: 6
+      length: 4
+    - name: 4.2 - 5.2 Offset from 00.00 local time, LSb = 15 mins, signed, can select hours in previous days like ‘02:00 on Friday before last Sunday of October local, time’ would need Offset = (2hr - 48hr) * 4 = -184
+      type: signed-integer
+      value: 0
+      byte: 4
+      bit: 9
+      length: 4
+    - name: 5.3 - 5.5 End of DST Nth day of month, 1= First day, ..., 5= Fifth day, 6= Last day, 0= Use absolute date instead of relative ‘2nd Sunday of October’ , style
+      type: integer
+      value: 0
+      byte: 5
+      bit: 3
+      length: 3
+    - name: 5.6 - 6.2 1-7= Monday-Sunday, or 1-31= Day of month (absolute date), local time
+      type: integer
+      value: 0
+      byte: 5
+      bit: 6
+      length: 4
+    - name: 6.3 - 6.6 1-12= January-December
+      type: integer
+      value: 0
+      byte: 6
+      bit: 3
+      length: 4
+    - name: 6.7 - 7.7 Offset from 00:00 local DST, LSb = 15 mins, signed, can select hours in previous days like ’02:00 on Friday before last Sunday of April local DST’ would need Offset = (2hr - 48hr) * 4 = -184
+      type: signed-integer
+      value: 0
+      byte: 6
+      bit: 7
+      length: 9
+
+# Downlink Port 5: Set GNSS Parameters 1
+  downlink5:
+    - name: 0.0 - 0.6 Downlink sequence number (reported in acknowledgement)
+      type: integer
+      value: 1
+      byte: 0
+      bit: 0
+      length: 7
+    - name: 0.7 Require 3D GNSS fixes, default false
+      type: boolean
+      value: 0
+      byte: 0
+      bit: 7
+      length: 1
+    - name: 1 Max time to wait for initial coarse GNSS fix, 45-127= 45-127 seconds, 129-255= 1-127 minutes, default 3 mins
+      type: integer
+      value: 131 # 129 + 2
+      byte: 1
+      length: 1
+    - name: 2 Max time to wait for fine GNSS fix, 1-127= 1-127 seconds, 129-255= 1-127 minutes, 0 or 128 disables, default 5 s
+      type: integer
+      value: 5
+      byte: 2
+      length: 1
+    - name: 3 Target accuracy for the fine GNSS fix wait, LSb = 1m, default 20 m
+      type: integer
+      value: 20
+      byte: 3
+      length: 1
+    - name: 4 Required PDOP for valid GNSS, 25-100= 2.5 to 10.0, default 10.0
+      type: integer
+      value: 100
+      byte: 4
+      length: 1
+    - name: 5 Required position accuracy for valid GNSS, 5-100= 5-100 m, default 75 m
+      type: integer
+      value: 75
+      byte: 5
+      length: 1
+    - name: 6 Required speed accuracy for valid GNSS, 8-55= 2.88-19.8 km/h, default 10 km/h
+      type: integer
+      value: 20
+      byte: 6
+      length: 1
+    - name: 7 Discard first N GNSS points to allow solution to settle, 0-32= 0-32 positions, default 3
+      type: integer
+      value: 3
+      byte: 7
+      length: 1
+
+# Downlink Port 6: Set GNSS Parameters 2
+  downlink6:
+    - name: 0.0 - 0.6 Downlink sequence number (reported in acknowledgement)
+      type: integer
+      value: 1
+      byte: 0
+      bit: 0
+      length: 7
+    - name: 0.7 Reserved, set to zero
+      type: boolean
+      value: 0
+      byte: 0
+      bit: 7
+      length: 1
+    - name: 1 V1 Daily GNSS on-time budget, 45-127= 45-127 seconds, 129-255= 1-127 minutes, 0 or 128 for unlimited on-time budget, default unlimited, supported on Oyster 1, ignored on Oyster 3
+      type: integer
+      value: 0
+      byte: 1
+      length: 1
+    - name: 2 Max time to spend looking for 1st satellite, 1-255= 5-1275s, 0 disables signal validator, default 1 min
+      type: integer
+      value: 12 # 60 / 5
+      byte: 2
+      length: 1
+    - name: 3 Max time to spend looking for 2nd satellite, 0-255:=0-1275s, default 1 min
+      type: integer
+      value: 12 # 60 / 5
+      byte: 3
+      length: 1
+    - name: 4 Max time to spend looking for 3rd satellite, 0-255= 0-1275s, default 1 min
+      type: integer
+      value: 12 # 60 / 5
+      byte: 4
+      length: 1
+    - name: 5 Max time to spend looking for 4th satellite, 0-255= 0-1275s, default 1 min
+      type: integer
+      value: 12 # 60 / 5
+      byte: 5
+      length: 1
+    - name: 6.0 - 6.4 Satellite detection margin adjustment, signed, -16-15= -16-15 dB, >=0 requires stronger signal, <0 allows weaker signal, 0 is default
+      type: integer
+      value: 0
+      byte: 6
+      bit: 0
+      length: 5
+    - name: 6.5 V1 Enable Autonomous Aiding, default off, ignored on Oyster 3
+      type: boolean
+      value: 0
+      byte: 6
+      bit: 5
+      length: 1
+    - name: 6.6 - 6.7 Reserved, set to zero
+      type: boolean
+      value: 0
+      byte: 0
+      bit: 7
+      length: 2
+    - name: 7 V1 GNSS statistical model, 0= Portable, 2= Stationary,3= Pedestrian, 4= Automotive, 5=  Sea, 6= Air 1G, 7= Air 2G, 8= Air 4G, default 4, ignored on Oyster 3
+      type: integer
+      value: 4
+      byte: 7
+      length: 1
+    - name: 8 - 9 V1 Approximate maximum error from Autonomous Aiding calculations, 5-1000= 5-1000 m, 0= automatic, default= 100, ignored on Oyster 3
+      type: integer
+      value: 100
+      byte: 8
+      length: 2
+# Downlink Port 7: Set LoRaWAN Channels
+  downlink7:
+    - name: 0.0 - 0.6 Downlink sequence number (reported in acknowledgement)
+      type: integer
+      value: 1
+      byte: 0
+      bit: 0
+      length: 7
+    - name: 0.7 Reserved, set to zero
+      type: boolean
+      value: 0
+      byte: 0
+      bit: 7
+      length: 1
+    - name: 1.0 - 1.3 Minimum data rate to use when ADR is disabled, default is 0 (DR0)
+      type: integer
+      value: 0
+      byte: 1
+      bit: 0
+      length: 4
+    - name: 1.4 - 1.7 Maximum data rate to use when ADR is disabled, default is 2 (DR2)
+      type: integer
+      value: 2
+      byte: 1
+      bit: 4
+      length: 4
+    - name: 2 - 10 Uplink channel mask, set bits are enabled channels, LSb of the 1st byte is channel 0, MSb of the 9th byte is channel 71, set all zeros (default) for the region-specific defaults
+      type: integer
+      value: 0
+      byte: 2
+      length: 9
+
+# Downlink Port 8: Set LoRaWAN Join / App EUI
+  downlink8:
+    - name: 0.0 - 0.6 Downlink sequence number (reported in acknowledgement)
+      type: integer
+      value: 1
+      byte: 0
+      bit: 0
+      length: 7
+    - name: 0.7 Set JoinEUI, 0= Use default JoinEUI, 1= Use supplied JoinEUI, default 0
+      type: boolean
+      value: 0
+      byte: 0
+      bit: 7
+      length: 1
+    - name: 1 - 8 JoinEUI, non-zero, big endian, i.e. default JoinEUI 70-B3-D5-70-50-00-00-00 is encoded with first byte as 0x70 and the second byte 0xB3
+      type: integer
+      value: 70B3D57050000000H
+      byte: 1
+      length: 8
+
+# Downlink Port 9: Set Advanced LoRaWAN Options
+  downlink9:
+    - name: 0.0 - 0.6 Downlink sequence number (reported in acknowledgement)
+      type: integer
+      value: 1
+      byte: 0
+      bit: 0
+      length: 7
+    - name: 0.7 Reserved, set to zero
+      type: boolean
+      value: 0
+      byte: 0
+      bit: 7
+      length: 1
+    - name: 1 Days between network joins, 0 disables, default 7
+      type: integer
+      value: 7
+      byte: 1
+      length: 1
+    - name: 2.0 - 2.1 ADR support, 0= Never, 1= When out-of-trip, 2= Always, default 1
+      type: integer
+      value: 1
+      byte: 2
+      bit: 0
+      length: 2
+    - name: 2.2 - 2.3 Reserved, set to zero
+      type: integer
+      value: 0
+      byte: 2
+      bit: 2
+      length: 2
+    - name: 2.4 - 2.7 Initial frame repetitions (NbTrans/Reps), 1-15, default 1
+      type: integer
+      value: 1
+      byte: 2
+      bit: 4
+      length: 4
+    - name: 3.0 - 3.3 Initial MaxCount0, sets uplinks between Rejoin0 attempts in LoRaWAN 1.1 OTAA, uplink interval equals 2^(4+MaxCount0), default 15
+      type: integer
+      value: 15
+      byte: 3
+      bit: 0
+      length: 4
+    - name: 3.4 - 3.7 Initial MaxTime0, sets approx. time between Rejoin0 attempts in LoRaWAN 1.1 OTAA, uplink period equals 2^(10+MaxTime0) s, default 15
+      type: integer
+      value: 15
+      byte: 3
+      bit: 4
+      length: 4
+    - name: 4.0 - 4.3 Initial AdrAckLimitExp, sets uplinks between ADR confirmation requests, uplink interval equals 2^AdrAckLimitExp, default 6 (limit is 64)
+      type: integer
+      value: 6
+      byte: 4
+      bit: 0
+      length: 4
+    - name: 4.4 - 4.7 Initial AdrAckDelayExp, sets uplinks between ADR backoff steps, uplink interval equals 2^AdrAckDelayExp, default 5 (delay is 32)
+      type: integer
+      value: 5
+      byte: 4
+      bit: 4
+      length: 4
+    - name: 5 Maximum Tx power limit, signed, -128-127= -128 to 127 dBm EIRP, default 127 (no limit)
+      type: integer
+      value: 127
+      byte: 5
+      length: 1
+    - name: 6 Random Tx delay, 0= disabled, 1-127= 1-127 seconds, 129-255= 1-127 minutes, default disabled
+      type: integer
+      value: 0
+      byte: 6
+      length: 1
+
+# Downlink Port 10: Set Inactivity Parameters
+  downlink10:
+    - name: 0.0 - 0.6 Downlink sequence number (reported in acknowledgement)
+      type: integer
+      value: 1
+      byte: 0
+      bit: 0
+      length: 7
+    - name: 0.7 Reserved, set to zero
+      type: boolean
+      value: 0
+      byte: 0
+      bit: 7
+      length: 1
+    - name: 1.0 - 1.1 Inactivity Indicator Alarm fix on set, 0= no fix, 1= single fix attempt, 2= retry fix attempts if network not ready (i.e. join failed - uplinks are still unconfirmed), default 0
+      type: integer
+      value: 0
+      byte: 1
+      bit: 0
+      length: 2
+    - name: 1.2 - 1.3 Inactivity Indicator Alarm fix on clear, see above
+      type: integer
+      value: 0
+      byte: 1
+      bit: 2
+      length: 2
+    - name: 1.4 - 1.7 Reserved, set to zero
+      type: boolean
+      value: 0000B
+      byte: 1
+      bit: 4
+      length: 4
+    - name: 2 Inactivity Indicator Alarm timeout, 1-127= 10-1270 min, 129-255= 12-1524 hours, others disable, default 0
+      type: integer
+      value: 0
+      byte: 2
+      length: 1
+    - name: 3 Inactivity Alarm Heartbeat Period, 1-127= 1-127 mins, 129-255= 1-127 hours, default 0 (disabled)
+      type: integer
+      value: 0
+      byte: 3
+      length: 1
+    - name: 4 V3 Position Uplink, when in-trip, 0= Auto, others= uplink number
+      type: integer
+      value: 1
+      byte: 4
+      length: 1
+    - name: 5 V3 Position Uplink, when not in-trip, 0= Auto, others= uplink number 6 GNSS fix every nth heartbeat, >= 1, default 1 (fix every heartbeat)
+      type: integer
+      value: 1
+      byte: 5
+      length: 1
+    - name: 7.0 - 7.4 Extra end-of-trip heartbeats, default 0
+      type: integer
+      value: 0
+      byte: 7
+      bit: 0
+      length: 5
+    - name: 7.5 - 8.7 Time between extra end-of-trip heartbeats, 0-2047= 0-20470 s, default 60 s
+      type: integer
+      value: 6
+      byte: 7
+      bit: 5
+      length: 11
+
+# Downlink Port 11: Set Scheduled Upload Parameters
+  downlink11:
+    - name: 0.0 - 0.6 Downlink sequence number (reported in acknowledgement)
+      type: integer
+      value: 1
+      byte: 0
+      bit: 0
+      length: 7
+    - name: 0.7 0= Single fix attempt, 1= Retry fix attempts if network not ready (i.e. join failed - uplinks are still unconfirmed), supported from firmware version 2.0 onwards, unconfigured default is no attempts
+      type: boolean
+      value: 0
+      byte: 0
+      bit: 7
+      length: 1
+    - name: 1 Local time* of scheduled upload time 1, 1-192= 00:07:30-24:00:00 (7.5 min intervals), +- 5 minutes randomization, default 0 (disabled)
+      type: integer
+      value: 0
+      byte: 1
+      length: 1
+    - name: 2 Local time* of scheduled upload time 2, see above
+      type: integer
+      value: 0
+      byte: 2
+      length: 1
+    - name: 3 Local time* of scheduled upload time 3, see above
+      type: integer
+      value: 0
+      byte: 3
+      length: 1
+    - name: 4 Local time* of scheduled upload time 4, see above
+      type: integer
+      value: 0
+      byte: 4
+      length: 1
+    - name: 5 Local time* of scheduled upload time 5, see above
+      type: integer
+      value: 0
+      byte: 5
+      length: 1
+    - name: 6 Local time* of scheduled upload time 6, see above
+      type: integer
+      value: 0
+      byte: 6
+      length: 1
+    - name: 7 Local time* of scheduled upload time 7, see above
+      type: integer
+      value: 0
+      byte: 7
+      length: 1
+    - name: 8 Local time* of scheduled upload time 8, see above
+      type: integer
+      value: 0
+      byte: 8
+      length: 1
+    - name: 9 Local time* of scheduled upload time 9, see above
+      type: integer
+      value: 0
+      byte: 9
+      length: 1
+    - name: 10 Local time* of scheduled upload time 10, see above
+      type: integer
+      value: 0
+      byte: 10
+      length: 1
+
+# Downlink Port 12: Set Scheduled Upload Parameters (continued)
+  downlink12:
+    - name: 0.0 - 0.6 Downlink sequence number (reported in acknowledgement)
+      type: integer
+      value: 1
+      byte: 0
+      bit: 0
+      length: 7
+    - name: 0.7 Reserved, set to zero
+      type: boolean
+      value: 0
+      byte: 0
+      bit: 7
+      length: 1
+    - name: 1 Local time* of scheduled upload time 11, 1-192= 00:07:30-24:00:00 (7.5 min intervals), +- 5 minutes randomization, default 0 (disabled)
+      type: integer
+      value: 0
+      byte: 1
+      length: 1
+    - name: 2 Local time* of scheduled upload time 12, see above
+      type: integer
+      value: 0
+      byte: 2
+      length: 1
+
+# Downlink Port 30: Set Device Statistics Parameters
+  downlink30:
+    - name: 0.0 - 0.6 Downlink sequence number (reported in acknowledgement)
+      type: integer
+      value: 1
+      byte: 0
+      bit: 0
+      length: 7
+    - name: 0.7 Battery type, 0= lithium, 1= alkaline, default 0
+      type: boolean
+      value: 0
+      byte: 0
+      bit: 7
+      length: 1
+    - name: 1 - 2 Time between statistics uplinks, 0 - 65535 hours, +-12% variance, 0 disables, default 96 (4 days)
+      type: integer
+      value: 96
+      byte: 1
+      length: 2
+    - name: 3 - 4 Per-cell battery capacity, 1-65535 mWh, 0 disables, default 5000
+      type: integer
+      value: 5000
+      byte: 3
+      length: 2
+    - name: 5 Battery percentage discharge per year, 0-255= 0-25.5 %, default 3 %
+      type: integer
+      value: 30
+      byte: 5
+      length: 1
+    - name: 6.0 Disable Uplink 3, default 0 (send)
+      type: boolean
+      value: 0
+      byte: 6
+      bit: 0
+      length: 1
+    - name: 6.1 Disable Uplink 31, default 0 (send)
+      type: boolean
+      value: 0
+      byte: 0
+      bit: 1
+      length: 1
+    - name: 6.2 - 6.7 Reserved, send as zero
+      type: boolean
+      value: 0
+      byte: 6
+      bit: 2
+      length: 6
+
+# Downlink Port 31: Set GNSS Parameters 3
+  downlink31:
+    - name: 0.0 - 0.6 Downlink sequence number (reported in acknowledgement)
+      type: integer
+      value: 1
+      byte: 0
+      bit: 0
+      length: 7
+    - name: 0.7 Reserved, set to zero
+      type: boolean
+      value: 0
+      byte: 0
+      bit: 7
+      length: 1
+    - name: 1.0 Use GPS constellation, default 1 (use)
+      type: boolean
+      value: 1
+      byte: 1
+      bit: 0
+      length: 1
+    - name: 1.1 Use SBAS constellation, default 1 (use)
+      type: boolean
+      value: 1
+      byte: 1
+      bit: 1
+      length: 1
+    - name: 1.2 Use QZSS / CA constellation, default 1 (use)
+      type: boolean
+      value: 1
+      byte: 1
+      bit: 2
+      length: 1
+    - name: 1.3 Use QZSS / S constellation, default 1 (use)
+      type: boolean
+      value: 1
+      byte: 1
+      bit: 3
+      length: 1
+    - name: 1.4 Use GLONASS constellation, default 1 (use)
+      type: boolean
+      value: 1
+      byte: 1
+      bit: 4
+      length: 1
+    - name: 1.5 Use Galileo constellation, default 1 (use)
+      type: boolean
+      value: 1
+      byte: 1
+      bit: 5
+      length: 1
+    - name: 1.6 - 1.7 Reserved, set to zero
+      type: boolean
+      value: 0
+      byte: 1
+      bit: 6
+      length: 2
+
+# Downlink Port 32: Set Accelerometer Parameters
+  downlink32:
+    - name: 0.0 - 0.6 Downlink sequence number (reported in acknowledgement)
+      type: integer
+      value: 1
+      byte: 0
+      bit: 0
+      length: 7
+    - name: 0.7 Enable higher precision thresholds, and thresholds below 0.078 G
+      type: boolean
+      value: 0
+      byte: 0
+      bit: 7
+      length: 1
+    - name: 1 Accelerometer wakeup threshold, 2-32= 32-500 mG, default 94 mG
+      type: integer
+      value: 7
+      byte: 1
+      length: 1
+    - name: 2 Accelerometer wakeup count, 1-100= 10-1000 ms, default 100 ms
+      type: integer
+      value: 10
+      byte: 2
+      length: 1
+    - name: 3.0 - 3.3 Accelerometer sampling rate (Hz), 0-4= {1, 10, 25, 50, 100}, default 1 (10 Hz)
+      type: integer
+      value: 1
+      byte: 3
+      bit: 0
+      length: 4
+    - name: 3.4 - 3.7 Reserved, set to zero
+      type: integer
+      value: 0000B
+      byte: 3
+      bit: 4
+      length: 4
+
+# Downlink Port 33: Reset ABP Session Counters
+  downlink33:
+    - name: 0.0 - 0.6 Downlink sequence number (reported in acknowledgement)
+      type: integer
+      value: 1
+      byte: 0
+      bit: 0
+      length: 7
+    - name: 0.7 Reset FCnts every power cycle when using ABP on LoRaWAN 1.0, default 0 (don’t reset)
+      type: boolean
+      value: 0
+      byte: 0
+      bit: 7
+      length: 1
+
+# Downlink Port 34: Reset Statistics Command
+  downlink34:
+    - name: 0.0 - 0.6 Downlink sequence number (reported in acknowledgement)
+      type: integer
+      value: 1
+      byte: 0
+      bit: 0
+      length: 7
+    - name: 0.7 Reserved, set to zero
+      type: boolean
+      value: 0
+      byte: 0
+      bit: 7
+      length: 1
+    - name: 1.0 Reset all statistics in Uplink 3 and Uplink 31
+      type: boolean
+      value: 0
+      byte: 1
+      bit: 0
+      length: 1
+    - name: 1.1 Reset just the Battery Critical indicator
+      type: boolean
+      value: 0
+      byte: 1
+      bit: 0
+      length: 1
+    - name: 1.2 - 1.7 Reserved, set to zero
+      type: boolean
+      value: 0
+      byte: 1
+      bit: 2
+      length: 6
+
+# Downlink Port 35: Poll Command
+  downlink35:
+    - name: 0.0 - 0.6 Downlink sequence number (reported in acknowledgement)
+      type: integer
+      value: 1
+      byte: 0
+      bit: 0
+      length: 7
+    - name: 0.7 Send Downlink Ack (Uplink 2)
+      type: boolean
+      value: false
+      byte: 0
+      bit: 7
+      length: 1
+    - name: 1.0 Send Device Statistics (Uplink 3)
+      type: boolean
+      value: false
+      byte: 1
+      bit: 0
+      length: 1
+    - name: 1.1 Send Device Statistics V3 (Uplink 31)
+      type: boolean
+      value: false
+      byte: 1
+      bit: 1
+      length: 1
+    - name: 1.2 Apply Poll Position Count and Poll Position Period
+      type: boolean
+      value: true
+      byte: 1
+      bit: 2
+      length: 1
+    - name: 1.3 - 1.7 Reserved, set to zero
+      type: integer
+      value: 0
+      byte: 1
+      bit: 3
+      length: 4
+    - name: 2 - 3 Poll Position Count, 0= cancel, 1-65535= send 1-65535 positions
+      type: integer
+      value: 0
+      byte: 2
+      length: 2
+    - name: 4 - 5 Poll Position Period, 1-65535= 10 to 655350 seconds between uplinks
+      type: integer
+      value: 0
+      byte: 4
+      length: 2

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map with GPS Route</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        header form {
+            display: inline-block;
+        }
+        header button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+            border-radius: 5px;
+        }
+        header button:hover {
+            background-color: #d32f2f;
+        }
+        header input[type="date"] {
+            padding: 5px;
+            font-size: 16px;
+        }
+        #map {
+            position: absolute;
+            top: 80px; /* Adjust based on header height */
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>GPS Route Map</h1>
+        <form method="POST" action="/">
+            <label for="date">Select Date:</label>
+            <input type="date" id="date" name="date" value="{{ selected_date }}">
+            <button type="submit">update</button>
+        </form>
+    </header>
+    <div id="map">
+        <!-- Include the map content -->
+        {% include "map_content.html" %}
+    </div>
+</body>
+</html>
