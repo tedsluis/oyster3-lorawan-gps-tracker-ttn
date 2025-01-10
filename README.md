@@ -182,7 +182,7 @@ Try again in 30 seconds...
 
 ## Docs
 
-* [docs/Oyster3- LoRaWAN-Configuration-and-Usage-Guide-Digital-Matter.pdf](./docs/Oyster3-LoRaWAN-Configuration-and-Usage-Guide-Digital-Matter.pdf)
+* [docs/Oyster3-LoRaWAN-Configuration-and-Usage-Guide-Digital-Matter.pdf](./docs/Oyster3-LoRaWAN-Configuration-and-Usage-Guide-Digital-Matter.pdf)
 * [docs/Oyster3-LoRaWAN-Datasheet-Digital-Matter-2024.pdf](./docs/Oyster3-LoRaWAN-Datasheet-Digital-Matter-2024.pdf)
 * [docs/Oyster3-LoRaWAN-GPS-Battery-Powered-LoRa-Tracker.pdf](./docs/Oyster3-LoRaWAN-GPS-Battery-Powered-LoRa-Tracker.pdf)
 * [docs/Oyster3-LoRaWAN-Integration-1.3.pdf](./docs/Oyster3-LoRaWAN-Integration-1.3.pdf)
