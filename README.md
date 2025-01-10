@@ -59,7 +59,7 @@ View in the webbrowser: http://localhost:5000
 
 Configuring the Digital Matter Oyster3 LoRaWAN GPS Tracker involves sending downlink messages from your LoRaWAN network server, such as The Things Network (TTN). Downlinks are used to update the device's settings remotely, enabling you to customize its behavior for specific use cases like asset tracking, fleet management, or environmental monitoring.
 
-Set relevant values the [config.yaml](./config.yaml) file for a particular downlink. Also change the sequence number, so you can later on verify if the configuration was made to the device. Check the [Oyster3-Lorawan-Integration Manual](docs/Oyster3-LoRaWAN-Integration-1.3.pdfOyster3-LoRaWAN-Integration-1.3.pdf) for the details.
+Set relevant values in the [config.yaml](./config.yaml) file for a particular downlink. Also change the sequence number, so you can later on verify if the configuration was made to the device. Check the [Oyster3-Lorawan-Integration Manual](docs/Oyster3-LoRaWAN-Integration-1.3.pdf) for the details.
 
 Be aware that some 'faulty' configuration changes on the downlink 7, 8 or 9 (all related to the Lorawan configuration) can make the device unreachable. However, all other 'faulty' configurations can be undone by applying the correct configuration.
 
@@ -182,7 +182,10 @@ Try again in 30 seconds...
 
 ## Docs
 
-* [docs/](./docs/)
+* [docs/Oyster3- LoRaWAN-Configuration-and-Usage-Guide-Digital-Matter.pdf](./docs/Oyster3-LoRaWAN-Configuration-and-Usage-Guide-Digital-Matter.pdf)
+* [docs/Oyster3-LoRaWAN-Datasheet-Digital-Matter-2024.pdf](./docs/Oyster3-LoRaWAN-Datasheet-Digital-Matter-2024.pdf)
+* [docs/Oyster3-LoRaWAN-GPS-Battery-Powered-LoRa-Tracker.pdf](./docs/Oyster3-LoRaWAN-GPS-Battery-Powered-LoRa-Tracker.pdf)
+* [docs/Oyster3-LoRaWAN-Integration-1.3.pdf](./docs/Oyster3-LoRaWAN-Integration-1.3.pdf)
 * https://www.digitalmatter.com/devices/oyster-lorawan/
 * https://www.digitalmatter.com/wp-content/uploads/2024/03/Oyster3-LoRaWAN-Datasheet-Digital-Matter-2024.pdf
 * https://static.helpjuice.com/helpjuice_production/uploads/upload/image/14099/3479218/1694608512517-Oyster%2B3%2BLoRaWAN%2BIntegration%2B1.3.pdf
@@ -220,6 +223,9 @@ Rx Time: 04 Mar 2022 14:03:00 GMT
   "speedKmph": 55
 }
 ````
+
+## Configuration using Downlinks
+
 
 ### Configuration Downlink Port 1
 Set Trip Parameters
