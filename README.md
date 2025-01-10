@@ -4,7 +4,7 @@ This project is designed to help you seamlessly integrate and utilize the Digita
 
 This repository provides a comprehensive guide and resources for configuring the Oyster3 GPS tracker, decoding its payloads, and leveraging TTN for data transmission and visualization. Whether you're an IoT enthusiast, a developer, or a company looking to deploy a scalable GPS tracking solution, this project will help you get started quickly and effectively.
 
-Features
+### Features
 
 * Device Configuration: Script to configure the Oyster 3 device using Lorawan Downlinks (No additional software and hardware required).
 * Visualization: Webserver to visualize GPS data plotted on Openstreet Map with GPS marker with date selector.
@@ -178,6 +178,47 @@ Response Code: 200
 NO_MATCH acknowledged: received_at: 2025-01-04T20:56:24.896061304Z, sequence number: 1, accepted: True, downlink_port_number: 9
 MATCH:   acknowledged: received_at: 2025-01-05T13:56:56.256908367Z, sequence number: 2, accepted: True, downlink_port_number: 9
 Try again in 30 seconds...
+````
+
+## Docs
+
+* [docs/](./docs/)
+* https://www.digitalmatter.com/devices/oyster-lorawan/
+* https://www.digitalmatter.com/wp-content/uploads/2024/03/Oyster3-LoRaWAN-Datasheet-Digital-Matter-2024.pdf
+* https://static.helpjuice.com/helpjuice_production/uploads/upload/image/14099/3479218/1694608512517-Oyster%2B3%2BLoRaWAN%2BIntegration%2B1.3.pdf
+* https://support.digitalmatter.com/oyster3-lorawan/oyster-3-lorawan%C2%AE-configuration-and-usage-guide
+
+## The Thing Network
+
+* https://\<CONSOLE_NAME\>.\<REGION\>.cloud.thethings.industries/console/applications/<APLICATION>/devices/<DEVICE>/data
+* https://\<CONSOLE_NAME\>.\<REGION\>.cloud.thethings.industries/noc/d/extended-ttsenddevice/end-device-details?from=now-2d&to=now-5m&var-end_device_id=<DEVICE_ID>&var-application_id=<APPLICATION_ID>&orgId=1300
+
+
+## Oyster 3 LoRaWAN Uplink 1 Decoder
+
+Test links:
+
+* https://support.digitalmatter.com/oyster3-lorawan/decoding-the-oyster-3-lorawan%C2%AE-uplink
+* https://www.oemserver.com/tools/Oyster3LoRaWAN/oyster3-lr-html-decoder.html
+
+````
+Oyster 3 LoRaWAN Uplink Decoder
+
+Port: 1
+Hex/Base64: 56ae401fef84083645920b5
+Rx Time: 04 Mar 2022 14:03:00 GMT
+{
+  "type": "position",
+  "inTrip": false,
+  "fixFailed": false,
+  "batV": 4.525,
+  "inactivityAlarm": null,
+  "batCritical": null,
+  "latitudeDeg": 53.185615,
+  "longitudeDeg": 6.0089967,
+  "headingDeg": 201,
+  "speedKmph": 55
+}
 ````
 
 ### Configuration Downlink Port 1
@@ -851,43 +892,3 @@ k  |   |   | h |         |       |                    |                     |
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 ````
 
-## docs
-
-* [docs/](./docs/)
-* https://www.digitalmatter.com/devices/oyster-lorawan/
-* https://www.digitalmatter.com/wp-content/uploads/2024/03/Oyster3-LoRaWAN-Datasheet-Digital-Matter-2024.pdf
-* https://static.helpjuice.com/helpjuice_production/uploads/upload/image/14099/3479218/1694608512517-Oyster%2B3%2BLoRaWAN%2BIntegration%2B1.3.pdf
-* https://support.digitalmatter.com/oyster3-lorawan/oyster-3-lorawan%C2%AE-configuration-and-usage-guide
-
-# The Thing Network
-
-* https://<CONSOLE>.<REGION>.cloud.thethings.industries/console/applications/<APLICATION>/devices/<DEVICE>/data
-* https://<CONSOLE>.<REGION>.cloud.thethings.industries/noc/d/extended-ttsenddevice/end-device-details?from=now-2d&to=now-5m&var-end_device_id=<DEVICE_ID>&var-application_id=<APPLICATION_ID>&orgId=1300
-
-
-## Oyster 3 LoRaWAN Uplink 1 Decoder
-
-Test links:
-
-* https://support.digitalmatter.com/oyster3-lorawan/decoding-the-oyster-3-lorawan%C2%AE-uplink
-* https://www.oemserver.com/tools/Oyster3LoRaWAN/oyster3-lr-html-decoder.html
-
-````
-Oyster 3 LoRaWAN Uplink Decoder
-
-Port: 1
-Hex/Base64: 56ae401fef84083645920b5
-Rx Time: 04 Mar 2022 14:03:00 GMT
-{
-  "type": "position",
-  "inTrip": false,
-  "fixFailed": false,
-  "batV": 4.525,
-  "inactivityAlarm": null,
-  "batCritical": null,
-  "latitudeDeg": 53.185615,
-  "longitudeDeg": 6.0089967,
-  "headingDeg": 201,
-  "speedKmph": 55
-}
-````
