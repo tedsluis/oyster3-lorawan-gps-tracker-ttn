@@ -1,4 +1,9 @@
 ---
+# Important: Only changes the 'value' in this file!
+# Never change the name, type, byte, bit or length!
+
+# Everthing is configured default.
+
 config:
 # Downlink Port 1: Set Trip Parameters
   downlink1:

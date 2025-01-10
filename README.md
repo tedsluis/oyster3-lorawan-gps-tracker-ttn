@@ -1,9 +1,16 @@
 # Oyster3-lorawan GPS tracker
 
-* GPS tracking using the Oyster 3 lorawan GPS tracker.
-* Connected using the Lorawan TTN (The Thing Network).
-* Route plotted on Openstreet Map with GPS marker with date selector.
-* Full configuring of the Oyster 3 device using Lorawan Downlinks (No additional software and hardware required).
+This project is designed to help you seamlessly integrate and utilize the Digital Matter Oyster3 GPS tracker with The Things Network (TTN). The Oyster3 is a robust, low-power, and highly accurate GPS tracking device, making it ideal for a wide range of IoT applications, including asset tracking, fleet management, and environmental monitoring.
+
+This repository provides a comprehensive guide and resources for configuring the Oyster3 GPS tracker, decoding its payloads, and leveraging TTN for data transmission and visualization. Whether you're an IoT enthusiast, a developer, or a company looking to deploy a scalable GPS tracking solution, this project will help you get started quickly and effectively.
+
+Features
+
+* Device Configuration: Script to configure the Oyster 3 device using Lorawan Downlinks (No additional software and hardware required).
+* Visualization: Webserver to visualize GPS data plotted on Openstreet Map with GPS marker with date selector.
+* Payload Encoding/Decoding: Detailed payload formating
+* TTN Integration: Guide for connecting your tracker to lorawan TTN (The Thing Network).
+* Should be compatible the previous model Oyster LoRaWAN. Not tested. Check the documentation!
 
 ## Scripts
 
@@ -36,6 +43,10 @@ $ sudo firewall-cmd --permanent --add-port=5000/tcp
 
 ### Run webserver with tracking marker on Open Streetmap
 
+The webserver.py script is designed to provide a lightweight, local web server (flask & Folium) interface for visualizing GPS data from the Oyster3 LoRaWAN GPS Tracker on Open Streeetmap. It enables users to select GPS data from a specific data and view the route using GPS markers in a user-friendly way through a browser-based interface.
+
+The script retrieves the latest GPS data from Oyster 3 everytime you click on the *update* button and saves the data in [./json/filename.json](./json/) as well as [./files/filename.txt](./files/).
+
 Start the webserver:
 ````bash
 $ python ./webserver.py
@@ -46,7 +57,12 @@ View in the webbrowser: http://localhost:5000
 
 ### Configure Oyster3-lorawan using downlinks
 
-Set relevant values the config.yaml file for a particular downlink. Check the [Oyster3-Lorawan-Integration Manual](docs/Oyster3-LoRaWAN-Integration-1.3.pdfOyster3-LoRaWAN-Integration-1.3.pdf) for the details.
+Configuring the Digital Matter Oyster3 LoRaWAN GPS Tracker involves sending downlink messages from your LoRaWAN network server, such as The Things Network (TTN). Downlinks are used to update the device's settings remotely, enabling you to customize its behavior for specific use cases like asset tracking, fleet management, or environmental monitoring.
+
+Set relevant values the [config.yaml](./config.yaml) file for a particular downlink. Also change the sequence number, so you can later on verify if the configuration was made to the device. Check the [Oyster3-Lorawan-Integration Manual](docs/Oyster3-LoRaWAN-Integration-1.3.pdfOyster3-LoRaWAN-Integration-1.3.pdf) for the details.
+
+Be aware that some 'faulty' configuration changes on the downlink 7, 8 or 9 (all related to the Lorawan configuration) can make the device unreachable. However, all other 'faulty' configurations can be undone by applying the correct configuration.
+
 Validate the output by running the configure-using-downlinks.py script (without the --send option):
 ````bash
 $ python ./configure-using-downlinks.py --downlink 9
@@ -153,8 +169,9 @@ k |   |   | h |         |     |            |                        |
   |   |   |   |         |     |            |                        | minutes, default disabled
 --------------------------------------------------------------------------------------------------------------------------------------------
 ````
+If you don't get an acknowledgement in time it doesn't mean the device configuration has failed. Sometimes it takes ages for a downlink to be comfirmed. It is always possible to check the acknowledgement later using the ack.py script.
 
-Check acknowledgement, specify the correct downlink and sequence number:
+To check acknowledgement, specify the correct downlink and sequence number:
 ````bash
 $ python ./ack.py  --downlink 9 --sequencenumber 2
 Response Code: 200
@@ -164,6 +181,7 @@ Try again in 30 seconds...
 ````
 
 ### Configuration Downlink Port 1
+Set Trip Parameters
 ````bash
 $ python ./configure-using-downlinks.py --downlink 1
 Send downlink: False
@@ -222,6 +240,7 @@ k |   |   | h |         |       |            |                           |
 ````
 
 ### Configuration Downlink Port 2
+Set After-Hours 1
 ````bash
 $ python ./configure-using-downlinks.py --downlink 2
 Send downlink: False
@@ -261,6 +280,7 @@ k |   |   | h |         |   |            |                              |
 ````
 
 ### Configuration Downlink Port 3
+Set After-Hours 2
 ````bash
 $ python ./configure-using-downlinks.py --downlink 3
 Send downlink: False
@@ -296,6 +316,7 @@ k |   |   | h |         |   |            |                        |
 ````
 
 ### Configuration Downlink Port 4
+Set Time Zone
 ````bash
 $ python ./configure-using-downlinks.py --downlink 4
 Send downlink: False
@@ -347,6 +368,7 @@ k |   |   | h |                |      |                    |                    
 ````
 
 ### Configuration Downlink Port 5
+Set GNSS Parameters 1
 ````bash
 $ python ./configure-using-downlinks.py --downlink 5
 Send downlink: False
@@ -385,6 +407,7 @@ k |   |   | h |         |     |            |                           |
 ````
 
 ### Configuration Downlink Port 6
+Set GNSS Parameters 2
 ````bash
 $ python ./configure-using-downlinks.py --downlink 6
 Send downlink: False
@@ -436,6 +459,7 @@ k |   |   | h |         |     |                    |                            
 ````
 
 ### Configuration Downlink Port 7
+Set LoRaWAN Channels
 ````bash
 $ python ./configure-using-downlinks.py --downlink 7
 Send downlink: False
@@ -465,6 +489,7 @@ k |   |   | h |         |   |                                                   
 ````
 
 ### Configuration Downlink Port 8
+Set LoRaWAN Join / App EUI
 ````bash
 $ python ./configure-using-downlinks.py --downlink 8
 Send downlink: False
@@ -489,6 +514,7 @@ k |   |   | h |         |                   |                                   
 ````
 
 ### Configuration Downlink Port 9
+Set Advanced LoRaWAN Options
 ````bash
 $ python ./configure-using-downlinks.py --downlink 9
 Send downlink: False
@@ -538,6 +564,7 @@ k |   |   | h |         |     |            |                        |
 ````
 
 ### Configuration Downlink Port 10
+Set Inactivity Parameters
 ````bash
 $ python ./configure-using-downlinks.py --downlink 10
 Send downlink: False
@@ -581,6 +608,7 @@ k  |   |   | h  |         |       |                    |                        
 ````
 
 ### Configuration Downlink Port 11
+Set Scheduled Upload Parameters
 ````bash
 $ python ./configure-using-downlinks.py --downlink 11
 Send downlink: False
@@ -623,6 +651,7 @@ k  |    |   | h |         |   |            |                                    
 ````
 
 ### Configuration Downlink Port 12
+Set Scheduled Upload Parameters (continued)
 ````bash
 $ python ./configure-using-downlinks.py --downlink 12
 Send downlink: False
@@ -647,6 +676,7 @@ k  |   |   | h |         |   |            |            |
 ````
 
 ### Configuration Downlink Port 30
+Set Device Statistics Parameters
 ````bash
 $ python ./configure-using-downlinks.py --downlink 30
 Send downlink: False
@@ -679,6 +709,7 @@ k  |   |   | h |         |      |                    |                        |
 ````
 
 ### Configuration Downlink Port 31
+Set GNSS Parameters 3
 ````bash
 $ python ./configure-using-downlinks.py --downlink 31
 Send downlink: False
@@ -712,6 +743,7 @@ k  |   |   | h |         |   |            |           |
 ````
 
 ### Configuration Downlink Port 32
+Set Accelerometer Parameters
 ````bash
 $ python ./configure-using-downlinks.py --downlink 32
 Send downlink: False
@@ -740,6 +772,7 @@ k  |   |   | h |         |       |            |               |
 ````
 
 ### Configuration Downlink Port 33
+Reset ABP Session Counters
 ````bash
 $ python ./configure-using-downlinks.py --downlink 33
 Send downlink: False
@@ -760,6 +793,7 @@ k  |   |   | h |         |   |            |           |
 ````
 
 ### Configuration Downlink Port 34
+Reset Statistics Command
 ````bash
 $ python ./configure-using-downlinks.py --downlink 34
 Send downlink: False
@@ -785,6 +819,7 @@ k  |   |   | h |         |   |            |           |
 ````
 
 ### Configuration Downlink Port 35
+Poll Command
 ````bash
 $ python ./configure-using-downlinks.py --downlink 35
 Send downlink: False
