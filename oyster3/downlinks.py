@@ -138,6 +138,15 @@ def validate_types(port, fields):
         low, high = field.get("min"), field.get("max")
         if low is not None and high is not None and low > high:
             problems.append(f"{label}: min {low} is greater than max {high}")
+        allowed = field.get("allowed")
+        if allowed is not None:
+            valid = isinstance(allowed, list) and all(
+                isinstance(r, list) and len(r) == 2 and r[0] <= r[1] for r in allowed
+            )
+            if not valid:
+                problems.append(f"{label}: allowed must be a list of [low, high] pairs")
+            if low is not None or high is not None:
+                problems.append(f"{label}: use either allowed or min/max, not both")
     return problems
 
 
@@ -205,6 +214,10 @@ def field_value(field, sequence=None):
 
 
 def _check_range(field, value):
+    allowed = field.get("allowed")
+    if allowed and not any(low <= value <= high for low, high in allowed):
+        ranges = ", ".join(f"{low}-{high}" if low != high else str(low) for low, high in allowed)
+        raise ValueError(f"{value} is not allowed (allowed: {ranges})")
     low, high = field.get("min"), field.get("max")
     if low is not None and value < low:
         raise ValueError(f"{value} is below the minimum {low}")

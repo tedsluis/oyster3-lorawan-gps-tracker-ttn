@@ -66,3 +66,36 @@ def test_cli_reports_invalid_value_instead_of_sending_garbage(tmp_path, capsys):
     assert code == 2
     assert "Byte Array" not in out
     assert "below the minimum 1" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize(
+    "port, prefix, value",
+    [
+        (1, "1 Max time between fix attempts out of trip", 0),
+        (1, "1 Max time between fix attempts out of trip", 128),
+        (5, "1 Max time to wait for initial coarse", 128),
+        (5, "1 Max time to wait for initial coarse", 44),
+        (6, "1 V1 Daily GNSS on-time budget", 30),
+        (6, "8 - 9 V1 Approximate maximum error", 5000),
+        (6, "8 - 9 V1 Approximate maximum error", 3),
+        (10, "3 Inactivity Alarm Heartbeat Period", 128),
+    ],
+)
+def test_split_spec_ranges_are_enforced(config, port, prefix, value):
+    # Review finding: ranges like 1-127 / 129-255 were not enforced (F16)
+    fields = with_values(config[port], **{prefix: value})
+    with pytest.raises(ValueError, match="is not allowed"):
+        encode_downlink(port, fields)
+
+
+@pytest.mark.parametrize(
+    "port, prefix, value",
+    [
+        (1, "1 Max time between fix attempts out of trip", 129),
+        (6, "1 V1 Daily GNSS on-time budget", 128),
+        (6, "8 - 9 V1 Approximate maximum error", 0),
+        (10, "3 Inactivity Alarm Heartbeat Period", 0),
+    ],
+)
+def test_values_inside_split_ranges_are_accepted(config, port, prefix, value):
+    encode_downlink(port, with_values(config[port], **{prefix: value}))

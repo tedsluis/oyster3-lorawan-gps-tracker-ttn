@@ -132,6 +132,8 @@ def random_value(field, rng):
         low, high = 0, (1 << size) - 1
     low = max(low, field.get("min", low))
     high = min(high, field.get("max", high))
+    if field.get("allowed"):
+        low, high = rng.choice(field["allowed"])
     return rng.randint(low, high)
 
 
