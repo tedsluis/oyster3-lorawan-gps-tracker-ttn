@@ -41,9 +41,9 @@ def test_audit_f26_values_are_the_spec_defaults(config, port, prefix, expected):
 
 def test_non_default_values_are_reported():
     fields = [
-        {"name": "1 A", "value": 3, "default": 3},
-        {"name": "2 B", "value": "0101B", "default": 5},
-        {"name": "3 C", "value": True, "default": False},
-        {"name": "0.0 - 0.6 Downlink sequence number", "value": 9},
+        {"name": "1 A", "type": "integer", "value": 3, "default": 3},
+        {"name": "2 B", "type": "integer", "value": "0101B", "default": 5},
+        {"name": "3 C", "type": "boolean", "value": True, "default": False},
+        {"name": "0.0 - 0.6 Downlink sequence number", "type": "integer", "value": 9},
     ]
     assert [f["name"] for f in non_default_fields(fields)] == ["3 C"]

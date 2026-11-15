@@ -23,8 +23,8 @@ Fase: 3 · Bezig met: - · Tests: 104 groen
 | F26 | 3 | KLAAR | tests/test_config_defaults.py | Echte defaults: DL5 byte 6 = 28 (10 km/h), DL10 bytes 4/5 = 0 (Auto), DL32 byte 1 = 6 (94 mG). default: bij alle 135 velden (behalve sequence). Kopcomment herschreven. CLI-waarschuwing bij afwijkende waarden: zie commit van F01 (test_cli_warns_about_non_default_values). |
 | F01 | 3 | KLAAR | tests/test_downlink_encoder.py (golden 18, sequence, round-trip ×90, CLI dry-run 18) | Nieuwe encoder via BitWriter (LSb-first). CLI herschreven bovenop oyster3/downlinks.py; zendslot blijft tot UNLOCK. |
 | F02 | 3 | KLAAR | tests/test_downlink_encoder.py::test_dl30_multi_byte_fields_are_little_endian, ::test_dl7_channel_mask_is_little_endian, ::test_dl8_join_eui_stays_big_endian | Meerbytevelden little-endian; alleen endian: big (DL8 JoinEUI) big-endian. |
-| F07 | 3 | KLAAR | tests/test_requirements.py | bitstring verwijderd uit code en requirements.txt; grep -ri bitstring (code/requirements/README) = 0. |
-| F16 | 3 | TODO | | |
+| F07 | 3 | KLAAR | tests/test_requirements.py | bitstring verwijderd uit code en requirements.txt. De oude voorbeelduitvoer in de README (kolomkop 'Bitstring') wordt in fase 7 (F27) opnieuw gegenereerd. |
+| F16 | 3 | KLAAR | tests/test_downlink_validation.py | parse_value strikt (boolean alleen true/false/0/1; B/H-suffix alleen bij integer-types); waarde moet passen (nooit afkappen); signed via two's complement na bereikcontrole; min/max afgedwongen; foutmelding noemt het veld; CLI geeft exit 2 i.p.v. een payload. |
 | F25 | 3 | TODO | | |
 | A3 | 3 | TODO | | |
 | A6 | 3 | TODO | | |

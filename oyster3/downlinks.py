@@ -136,25 +136,43 @@ def validate_config(config):
     return problems
 
 
-def _normalise(value):
+def parse_value(value, field_type):
+    """Parse a config value strictly. Integers may be written as decimal, or as a string
+    with a 'B' (binary) or 'H' (hexadecimal) suffix; booleans only as true/false/0/1."""
+    if field_type == "boolean":
+        if isinstance(value, bool):
+            return int(value)
+        if isinstance(value, int) and value in (0, 1):
+            return value
+        raise ValueError(f"boolean value must be true, false, 0 or 1, got {value!r}")
+    if field_type not in ("integer", "signed-integer"):
+        raise ValueError(f"unknown type {field_type!r}")
     if isinstance(value, bool):
-        return int(value)
+        raise ValueError(f"{field_type} value must be a number, got {value!r}")
+    if isinstance(value, int):
+        return value
     if isinstance(value, str):
-        text = value.strip().replace(" ", "")
-        if text.endswith("B"):
-            return int(text[:-1], 2)
-        if text.endswith("H"):
-            return int(text[:-1], 16)
-    return value
+        text = value.strip().replace(" ", "").replace("_", "")
+        try:
+            if text.endswith("B"):
+                return int(text[:-1], 2)
+            if text.endswith("H"):
+                return int(text[:-1], 16)
+        except ValueError:
+            pass
+    raise ValueError(f"cannot parse {value!r} as {field_type} (use a number, or a B/H suffix)")
 
 
 def non_default_fields(fields):
     """Fields whose value differs from their 'default' (the sequence number has no default)."""
-    return [
-        field
-        for field in fields
-        if "default" in field and _normalise(field["value"]) != _normalise(field["default"])
-    ]
+    differing = []
+    for field in fields:
+        if "default" not in field:
+            continue
+        value = parse_value(field["value"], field["type"])
+        if value != parse_value(field["default"], field["type"]):
+            differing.append(field)
+    return differing
 
 
 SEQUENCE_PREFIX = "0.0 - 0.6 Downlink sequence number"
@@ -167,7 +185,15 @@ def is_sequence_field(field):
 def field_value(field, sequence=None):
     if sequence is not None and is_sequence_field(field):
         return sequence
-    return _normalise(field["value"])
+    return parse_value(field["value"], field["type"])
+
+
+def _check_range(field, value):
+    low, high = field.get("min"), field.get("max")
+    if low is not None and value < low:
+        raise ValueError(f"{value} is below the minimum {low}")
+    if high is not None and value > high:
+        raise ValueError(f"{value} is above the maximum {high}")
 
 
 def encode_downlink(port, fields, sequence=None):
@@ -175,16 +201,24 @@ def encode_downlink(port, fields, sequence=None):
     (unless the field has ``endian: big``), signed fields in two's complement."""
     writer = BitWriter(SPEC_LENGTHS[port])
     for field in fields:
-        start, size = field_span(field)
-        value = field_value(field, sequence)
-        signed = field["type"] == "signed-integer"
-        if field.get("endian") == "big":
-            if signed:
-                value = to_unsigned(value, size)
-                signed = False
-            value = int.from_bytes(value.to_bytes(field["length"], "big"), "little")
-        writer.write(start, size, value, signed=signed)
+        try:
+            _encode_field(writer, field, field_value(field, sequence))
+        except (ValueError, OverflowError) as error:
+            raise ValueError(f"{field['name'][:60]!r}: {error}") from None
     return writer.to_bytes()
+
+
+def _encode_field(writer, field, value):
+    start, size = field_span(field)
+    _check_range(field, value)
+    signed = field["type"] == "signed-integer"
+    if field.get("endian") == "big":
+        value = to_unsigned(value, size) if signed else value
+        if not 0 <= value < (1 << size):
+            raise ValueError(f"{value} does not fit in an unsigned {size}-bit field")
+        value = int.from_bytes(value.to_bytes(field["length"], "big"), "little")
+        signed = False
+    writer.write(start, size, value, signed=signed)
 
 
 def describe_fields(port, fields, payload, sequence=None):
