@@ -19,9 +19,6 @@ from oyster3.downlinks import (
     validate_config,
 )
 
-# Temporary safety lock: sending stays disabled until all golden encoder tests pass.
-SEND_LOCKED = True
-
 TABLE_HEADER = ["Downlink", "Byte", "Bit", "Length", "Type", "Value", "Field bits (MSB..LSB)",
                 "Payload bytes", "Description"]
 TABLE_NOTE = ("Bits are numbered from the least significant bit (bit 0) of each byte, as in the "
@@ -168,10 +165,6 @@ def main(argv=None):
     global args, sequence_number, current_date
     global ttnDevice, ttnApplication, ttnRegion, ttnConsole, ttnAPIKey
     args = parse_args(argv)
-    if args.send and SEND_LOCKED:
-        sys.exit("Refusing to send: the downlink encoder is known to be wrong (see audit F01). "
-                 "Sending is disabled until the encoder is fixed.")
-
     config = load_config(args.config)
     problems = validate_config(config)
     if problems:

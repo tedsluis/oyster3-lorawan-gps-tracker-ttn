@@ -2,7 +2,7 @@
 Branch: fix/audit-2026-11 · Basiscommit: 358adea · Laatst bijgewerkt: 2026-11-15 17:50 CET
 
 ## Huidige stand
-Fase: 3 · Bezig met: - · Tests: 104 groen
+Fase: 4 · Bezig met: - · Tests: 295 groen
 
 ## Items
 | ID | Fase | Status | Test(s) | Notitie |
@@ -28,7 +28,7 @@ Fase: 3 · Bezig met: - · Tests: 104 groen
 | F25 | 3 | KLAAR | tests/test_cli_arguments.py | --downlink alleen 1-12 en 30-35 (configure, ack.py, uplinks.py); sequence 0-127 inclusief. Overbodige ack-argumenten van uplinks.py verdwijnen in fase 4. |
 | A3 | 3 | KLAAR | tests/test_send_path.py | f_port gaat als int (args.downlink) naar send_downlink; voorheen de string uit de YAML-sleutel. Gemockt, niets verstuurd. |
 | A6 | 3 | KLAAR | tests/test_cli_arguments.py::test_configure_sequence_override_is_used_in_payload, tests/test_downlink_encoder.py::test_sequence_override | --sequencenumber overschrijft de waarde uit config.yaml. |
-| UNLOCK zendslot eraf | 3 | TODO | | |
+| UNLOCK zendslot eraf | 3 | KLAAR | tests/test_send_path.py::test_send_never_happens_with_an_invalid_value | Slot verwijderd nadat alle golden tests groen waren. tests/test_send_lock.py vervangen door een veiligheidstest: --send verstuurt nooit bij een ongeldige waarde. |
 | F17 | 4 | TODO | | |
 | F14 | 4 | TODO | | |
 | F21 | 4 | TODO | | |
@@ -80,3 +80,4 @@ Correcties op de opdracht (door Ted akkoord bevonden vóór de start):
 - 2026-11-15 17:55 CET Fase 0 afgerond
 - 2026-11-15 18:05 CET Fase 1 afgerond
 - 2026-11-15 18:25 CET Fase 2 afgerond
+- 2026-11-15 19:20 CET Fase 3 afgerond (fasecontrole: bitstring uit code/requirements; dry-run 18 downlinks = golden-kolom via tests/test_downlink_encoder.py::test_cli_dry_run_prints_golden_payload)
