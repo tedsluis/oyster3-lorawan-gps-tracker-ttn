@@ -42,8 +42,14 @@ def test_negative_values_in_signed_bit_fields_are_encoded(config):
 
 @pytest.mark.parametrize(
     "value, field_type, expected",
-    [(5, "integer", 5), ("0101B", "integer", 5), ("1F H", "integer", 31), (True, "boolean", 1),
-     (0, "boolean", 0), ("70B3_D570H", "integer", 0x70B3D570)],
+    [
+        (5, "integer", 5),
+        ("0101B", "integer", 5),
+        ("1F H", "integer", 31),
+        (True, "boolean", 1),
+        (0, "boolean", 0),
+        ("70B3_D570H", "integer", 0x70B3D570),
+    ],
 )
 def test_parse_value_accepts_documented_notations(value, field_type, expected):
     assert parse_value(value, field_type) == expected

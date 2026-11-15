@@ -107,9 +107,7 @@ def test_dl6_negative_margin_adjustment(config):
 
 
 def test_dl10_old_position_uplink_values(config):
-    fields = with_values(
-        config[10], **{"4 V3 Position Uplink": 1, "5 V3 Position Uplink": 1}
-    )
+    fields = with_values(config[10], **{"4 V3 Position Uplink": 1, "5 V3 Position Uplink": 1})
     assert encode_downlink(10, fields).hex() == "01000000010101c000"
 
 
@@ -191,8 +189,10 @@ def test_cli_dry_run_prints_golden_payload(port):
 
 def test_cli_warns_about_non_default_values(tmp_path):
     # Audit F26: the CLI warns about every value that differs from its default
-    text = (REPO / "config.yaml").read_text().replace(
-        "      value: 6 # 94 mG", "      value: 7 # 109 mG"
+    text = (
+        (REPO / "config.yaml")
+        .read_text()
+        .replace("      value: 6 # 94 mG", "      value: 7 # 109 mG")
     )
     path = tmp_path / "config.yaml"
     path.write_text(text)

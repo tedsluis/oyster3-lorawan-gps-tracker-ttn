@@ -13,8 +13,24 @@ from oyster3.bits import BitWriter, read_field, to_unsigned
 
 # Payload length in bytes per downlink port (Integration spec rev. 1.3, §3.4-3.5).
 SPEC_LENGTHS = {
-    1: 8, 2: 9, 3: 7, 4: 8, 5: 8, 6: 10, 7: 11, 8: 9, 9: 7, 10: 9, 11: 11, 12: 3,
-    30: 7, 31: 2, 32: 4, 33: 1, 34: 2, 35: 6,
+    1: 8,
+    2: 9,
+    3: 7,
+    4: 8,
+    5: 8,
+    6: 10,
+    7: 11,
+    8: 9,
+    9: 7,
+    10: 9,
+    11: 11,
+    12: 3,
+    30: 7,
+    31: 2,
+    32: 4,
+    33: 1,
+    34: 2,
+    35: 6,
 }
 VALID_PORTS = tuple(SPEC_LENGTHS)
 FIELD_TYPES = ("integer", "signed-integer", "boolean")

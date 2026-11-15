@@ -29,14 +29,14 @@ Fase: 4 · Bezig met: - · Tests: 295 groen
 | A3 | 3 | KLAAR | tests/test_send_path.py | f_port gaat als int (args.downlink) naar send_downlink; voorheen de string uit de YAML-sleutel. Gemockt, niets verstuurd. |
 | A6 | 3 | KLAAR | tests/test_cli_arguments.py::test_configure_sequence_override_is_used_in_payload, tests/test_downlink_encoder.py::test_sequence_override | --sequencenumber overschrijft de waarde uit config.yaml. |
 | UNLOCK zendslot eraf | 3 | KLAAR | tests/test_send_path.py::test_send_never_happens_with_an_invalid_value | Slot verwijderd nadat alle golden tests groen waren. tests/test_send_lock.py vervangen door een veiligheidstest: --send verstuurt nooit bij een ongeldige waarde. |
-| F17 | 4 | TODO | | |
-| F14 | 4 | TODO | | |
-| F21 | 4 | TODO | | |
-| F12 | 4 | TODO | | |
-| F22 | 4 | TODO | | |
+| F17 | 4 | KLAAR | tests/test_ttn.py::test_urls_are_built_from_console_and_region, ::test_no_hardcoded_tenant_host_outside_the_client | Downlink- en storage-URL uit TTN_CONSOLE + TTN_REGION in oyster3/ttn.py; User-Agent meegestuurd. Geen host meer in scripts. |
+| F14 | 4 | KLAAR | tests/test_ttn.py (401, timeout, connection error, 403, lege respons), tests/test_send_path.py, tests/test_ack_cli.py::test_api_error_gives_clean_exit | timeout=30, raise_for_status → TTNError zonder API-key in de melding; geen hergebruik van oude response; CLI's geven exitcode 1 met melding. Webserver valt bij een TTN-fout terug op lokale data. |
+| F21 | 4 | KLAAR | tests/test_ttn.py::test_parse_storage_response* (7 varianten + API-fout + ongeldige JSON) | parse_storage_response: regel voor regel, lege regels overslaan, met/zonder event-stream. |
+| F12 | 4 | KLAAR | tests/test_ttn.py::test_wait_for_ack_*, ::test_find_ack_matches_sequence_and_port, tests/test_ack_cli.py | Aware UTC (eigen parser, ook nanoseconden), match op sequence én poort, stopt na MATCH (ook ack.py), --attempts/--interval instelbaar, ack.py --history. Sequence in de wachtlus komt uit de verzonden payload. |
+| F22 | 4 | KLAAR | tests/test_ttn.py::test_wait_for_ack_stops_after_match_and_only_asks_for_new_uplinks | Pollen met after=<verzendtijd − 1 min> en limit=100. README-tekst volgt in fase 7 (F27/A4). |
 | F11 | 4 | TODO | | Codedeel; key roteren/splitsen doet Ted. |
 | F09 | 5 | TODO | | |
-| F13 | 5 | TODO | | |
+| F13 | 5 | TODO | tests/test_ttn.py::test_fetch_uplinks_without_limit_when_number_of_records_is_zero | Deel klaar (fase 4): TTN_NUMBER_OF_RECORDS als int, 0/leeg = geen limit. Rest in fase 5. |
 | F08 | 6 | TODO | | |
 | F15 | 6 | TODO | | |
 | F19 | 6 | TODO | | |

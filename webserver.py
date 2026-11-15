@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 import os, sys, logging, time
-import requests
 import json
 import csv
 import re
@@ -12,14 +11,10 @@ import folium
 import glob
 
 
-ttnDevice = os.environ["TTN_DEVICE"]                     # TTN device id
-ttnApplication=os.environ["TTN_APPLICATION"]             # TTN application name
-ttnRegion = os.environ["TTN_REGION"]		             # TTN region
-ttnConsole = os.environ["TTN_CONSOLE"]                   # TTN console name
-ttnAPIKey = os.environ["TTN_API_KEY"]                    # TTN API KEY
-ttnNumberOfRecords = os.environ["TTN_NUMBER_OF_RECORDS"] # How many records you want, set to 0 if you want everything available
-ttnSinceDateTime = os.environ["TTN_SINCE_DATE_TIME"]     # Format is 2020-10-01T12:13:14Z From which date you want the records returned. Note, DS only holds 7 days of data
-ttnStorageURL = f"https://{ttnConsole}.{ttnRegion}.cloud.thethings.industries/api/v3/as/applications/{ttnApplication}/devices/{ttnDevice}/packages/storage/uplink_message?order=received_at&type=uplink_message"
+from oyster3.ttn import TTNConfig, TTNError, fetch_uplinks
+
+TTN_CONFIG = TTNConfig.from_env()
+ttnDevice = TTN_CONFIG.device
 
 def ExtractDateTime(json_file):
     # Extract the date portion of the filename
@@ -157,36 +152,20 @@ def fetchGPSdata(start_datetime,end_datetime):
 		print("\n\nAll data is localy available. Using local json files  ...\n")
 		someUplinks=jsondict
 	else:
-		ttnURL =  ttnStorageURL
-
-		if ttnNumberOfRecords:
-			ttnURL += "&limit=" + str(ttnNumberOfRecords)
-
-		if ttnSinceDateTime:
-			ttnURL += "&after=" + ttnSinceDateTime
-
-		# These are the headers required in the documentation.
-		ttnHeaders = { 'Accept': 'text/event-stream', 'Authorization': 'Bearer ' + ttnAPIKey }
-
 		print("\n\nNot all data is localy available. Fetching data from Lorawan storage  ...\n")
+		try:
+			results = fetch_uplinks(TTN_CONFIG)
+		except TTNError as error:
+			print(f"Fetching from TTN failed, showing local data only: {error}")
+			results = None
+		if results is None:
+			someUplinks = jsondict
+			younger_records_exists = older_records_exists = 1
+		else:
+			someJSON = {"data": [{"result": result} for result in results]}
+			someUplinks = someJSON["data"]
 
-		r = requests.get(ttnURL, headers=ttnHeaders)
-
-		print("URL: " + r.url)
-		print("Status: " + str(r.status_code))
-		print()
-
-		# The text returned is one block of JSON per uplink with a blank line between.
-		# Event Stream (see headers above) is a connection type that sends a message when it 
-		# becomes available. This script is about downloading a bunch of records in one go
-		# So we have to turn the response in to an array and remove the blank lines.
-
-		ttnJSON = "{\"data\": [" + r.text.replace("\n\n", ",")[:-1] + "]}";
-
-		someJSON = json.loads(ttnJSON)
-		# print(json.dumps(someJSON, indent=4))
-		someUplinks = someJSON["data"]
-
+	if not (younger_records_exists > 0 and older_records_exists > 0):
 		# Output to timestamped file
 		now = datetime.now()
 

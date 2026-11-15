@@ -6,15 +6,11 @@ requires-python = ">=3.10"
 [tool.ruff]
 line-length = 100
 target-version = "py310"
-# Temporary: legacy scripts are excluded until they are rewritten (audit fix phases 4-6).
-extend-exclude = ["json", "file", "data", "webserver.py", "ack.py", "uplinks.py", "read-json.py"]
+# Temporary: legacy scripts are excluded until they are rewritten (audit fix phases 5-6).
+extend-exclude = ["json", "file", "data", "webserver.py", "read-json.py"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B"]
-
-[tool.ruff.lint.per-file-ignores]
-# Temporary: the legacy send/confirm code is replaced by oyster3/ttn.py in phase 4.
-"configure-using-downlinks.py" = ["E501"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

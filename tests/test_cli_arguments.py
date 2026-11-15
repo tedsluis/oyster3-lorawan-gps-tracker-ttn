@@ -41,11 +41,15 @@ def test_configure_sequence_override_is_used_in_payload(capsys):
 def run_script(name, *args):
     return subprocess.run(
         [sys.executable, str(REPO / name), *args],
-        cwd=REPO, env={**os.environ, **DUMMY_ENV}, capture_output=True, text=True, timeout=60,
+        cwd=REPO,
+        env={**os.environ, **DUMMY_ENV},
+        capture_output=True,
+        text=True,
+        timeout=60,
     )
 
 
-@pytest.mark.parametrize("name", ["ack.py", "uplinks.py"])
+@pytest.mark.parametrize("name", ["ack.py"])
 def test_ack_scripts_validate_arguments_before_any_network_call(name):
     result = run_script(name, "--downlink", "0", "--sequencenumber", "127")
     assert result.returncode == 2
