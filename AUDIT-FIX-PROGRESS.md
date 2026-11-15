@@ -26,7 +26,7 @@ Fase: 3 · Bezig met: - · Tests: 104 groen
 | F07 | 3 | KLAAR | tests/test_requirements.py | bitstring verwijderd uit code en requirements.txt. De oude voorbeelduitvoer in de README (kolomkop 'Bitstring') wordt in fase 7 (F27) opnieuw gegenereerd. |
 | F16 | 3 | KLAAR | tests/test_downlink_validation.py | parse_value strikt (boolean alleen true/false/0/1; B/H-suffix alleen bij integer-types); waarde moet passen (nooit afkappen); signed via two's complement na bereikcontrole; min/max afgedwongen; foutmelding noemt het veld; CLI geeft exit 2 i.p.v. een payload. |
 | F25 | 3 | KLAAR | tests/test_cli_arguments.py | --downlink alleen 1-12 en 30-35 (configure, ack.py, uplinks.py); sequence 0-127 inclusief. Overbodige ack-argumenten van uplinks.py verdwijnen in fase 4. |
-| A3 | 3 | TODO | | |
+| A3 | 3 | KLAAR | tests/test_send_path.py | f_port gaat als int (args.downlink) naar send_downlink; voorheen de string uit de YAML-sleutel. Gemockt, niets verstuurd. |
 | A6 | 3 | KLAAR | tests/test_cli_arguments.py::test_configure_sequence_override_is_used_in_payload, tests/test_downlink_encoder.py::test_sequence_override | --sequencenumber overschrijft de waarde uit config.yaml. |
 | UNLOCK zendslot eraf | 3 | TODO | | |
 | F17 | 4 | TODO | | |
