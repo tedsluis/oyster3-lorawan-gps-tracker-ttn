@@ -43,14 +43,14 @@ Fase: 7 · Bezig met: - · Tests: 412 groen
 | F23 | 6 | KLAAR | tests/test_webserver.py::test_failed_fix_is_a_cached_marker_outside_the_route | Volgorde: fix_failed (rood, 'cached position') → stilstaand (groen) → snelheid 0 (blauw) → pijl. Regel 'heading 0 → oranje' vervallen (0° = noord). Fix-failed-punten niet in de routelijn. |
 | F24 | 6 | KLAAR | tests/test_webserver.py::test_bad_form_input_falls_back_with_a_message, ::test_template_uses_required_attribute | Ontbrekend/ongeldig/start na eind → default + melding, geen 500. requiered → required. |
 | F30 | 6 | KLAAR | tests/test_requirements.py::test_no_duplicate_or_dead_scripts + ruff (F401/F841/E722) over de hele repo | read-json.py verwijderd; webserver herschreven zonder dode code/ongebruikte imports/kale excepts; rx_metadata defensief in store.py; tijdelijke ruff-uitsluitingen opgeheven, ruff check + format over alle bestanden. |
-| F27 | 7 | TODO | | |
-| F28 | 7 | TODO | | |
+| F27 | 7 | KLAAR | tests/test_readme.py (dry-run-blokken 18/18 = echte uitvoer, geen verouderde/verkeerd gespelde tekst, relatieve links bestaan) | README: voorbeelduitvoer van alle 18 downlinks opnieuw gegenereerd uit de echte dry-run; --send/ack.py-voorbeelden herschreven op basis van de codepaden (sequence klopt); webserverbeschrijving bijgewerkt; typfouten; Discovery-plan i.p.v. 'TTN gratis'; ./files/-link weg; decodervoorbeeld vervangen door het specvoorbeeld (het oude voorbeeld bevatte mogelijk echte coördinaten en was bovendien ongeldige hex). |
+| F28 | 7 | KLAAR | tests/test_readme.py::test_readme_links_official_docs_instead_of_pdfs | PDF's uit de werkboom (git rm; zit per ongeluk in commit f8cb9a3 van F18), README linkt naar officiële bronnen (datasheet-URL gaf 404 → productpagina) + 'validated against Integration rev. 1.3'. Historie ongemoeid. |
 | A1 | 7 | OVERGESLAGEN | - | Claim klopt niet: README linkt naar 4 PDF's en alle 4 staan in docs/. Afgedekt door F28 (D2). |
 | F18 | 7 | KLAAR | tests/test_repository.py::test_license_is_mit, ::test_ci_runs_lint_and_tests_on_oldest_and_newest_python | LICENSE (MIT, Ted Sluis); .github/workflows/ci.yml: ruff check + format --check + pytest op Python 3.10 en 3.x, geen secrets. Testsuite bestond al (fase 1-6). |
-| F29 | 7 | TODO | | |
+| F29 | 7 | KLAAR | tests/test_readme.py::test_readme_documents_privacy_and_cdns, tests/test_store.py::test_store_files_are_private | README-paragraaf Privacy: wat lokaal staat, rechten 0700/0600, oude data verwijderen, CDN's + OSM-tiles (D8: alleen documenteren). |
 | F03 | 7 | KLAAR | tests/test_repository.py::test_recovery_runbook_payloads_match_the_encoder | docs/DEVICE-RECOVERY.md (Engels): achtergrond, ack.py --history (even = oud script), dry-run DL1/DL9 tegen golden hex, versturen met nieuwe sequence, DL35 poll stats (810300000000), NbTrans/consumed_airtime in de Console, waarschuwing DL7/8/9. Uitvoeren: WACHT-OP-TED. |
-| A4 | 7 | TODO | | |
-| A5 | 7 | TODO | | |
+| A4 | 7 | KLAAR | tests/test_readme.py::test_readme_explains_acknowledgements_and_storage_delay | README: ack één keer bij de eerstvolgende uplink (spec §3.4); verloren ack → gedrag controleren (DL35) of opnieuw sturen met nieuwe sequence. Ook F22-notitie (Storage Integration niet realtime). |
+| A5 | 7 | WACHT-OP-TED | - | map-example.png toont de oude UI (en mogelijk echte locaties). Nieuwe screenshot kan ik niet maken. |
 | 8 eindcontrole | 8 | TODO | | |
 
 Statussen: TODO · BEZIG · KLAAR · OVERGESLAGEN (met reden) · WACHT-OP-TED
@@ -69,11 +69,14 @@ Correcties op de opdracht (door Ted akkoord bevonden vóór de start):
 8. Python 3.10: eigen timestampparser (geen `Z`/nanoseconden in `fromisoformat`); lokaal alleen 3.15 beschikbaar, 3.10 wordt in CI getest.
 
 ## Afwijkingen t.o.v. audit
+- F28: de git rm van docs/*.pdf stond al gestaged en is meegegaan in commit f8cb9a3 (F18). Niet teruggedraaid (geen history-rewrite); de README-kant van F28 zit in de F27-commit.
+- F27: het oude decodervoorbeeld in de README (port 1) bevatte coördinaten die van het eigen apparaat kunnen zijn en was ongeldige hex (oneven lengte); vervangen door het specvoorbeeld. Het staat nog wel in de Git-historie.
 - Webserver (F08, F13, F15, F19, F23, F24) in één commit: het is één herschreven request-pipeline (bron → selectie → rendering → invoer); per bevinding is er een eigen test. F15 is uit fase 6 naar voren gehaald om tests nooit naar templates/map_content.html te laten schrijven.
 - F15: iframe srcdoc i.p.v. {{ map_html|safe }} in een div (de kaart is een volledig HTML-document; zo blijft hij geïsoleerd en geldig).
 - (Opgeheven in F30) Tijdelijk sloot ruff de legacy-scripts uit tot ze herschreven waren.
 
 ## Open vragen voor Ted
+- A5: map-example.png toont de oude UI. Maak een nieuwe screenshot (bij voorkeur met een niet-herleidbare locatie) of verwijder de afbeelding.
 - F03: voer docs/DEVICE-RECOVERY.md uit (eerst `python ack.py --history --hours 720`). Jij beslist en verstuurt.
 - F11: maak in de TTN Console een alleen-lezen key (RIGHT_APPLICATION_TRAFFIC_READ) voor TTN_API_KEY en een aparte downlink-key voor TTN_DOWNLINK_API_KEY. Roteer de huidige key als export-env-vars.sh ooit gedeeld is.
 
