@@ -2,7 +2,7 @@
 Branch: fix/audit-2026-11 · Basiscommit: 358adea · Laatst bijgewerkt: 2026-11-15 17:50 CET
 
 ## Huidige stand
-Fase: 1 · Bezig met: - · Tests: 0 groen
+Fase: 2 · Bezig met: - · Tests: 7 groen
 
 ## Items
 | ID | Fase | Status | Test(s) | Notitie |
@@ -13,7 +13,7 @@ Fase: 1 · Bezig met: - · Tests: 0 groen
 | 0.4 audit + spec gelezen | 0 | KLAAR | - | Auditrapport en spec §3 volledig gelezen; golden waarden onafhankelijk nagerekend vóór de start. |
 | F06 | 1 | KLAAR | tests/test_webserver_settings.py | Default 127.0.0.1 + debug uit; APP_HOST/APP_PORT/APP_DEBUG. README: firewall-advies vervangen door WSGI+reverse proxy-uitleg. |
 | LOCK zendslot | 1 | KLAAR | tests/test_send_lock.py | configure-using-downlinks.py --send stopt direct (exit≠0, melding 'audit F01'). Gaat er pas af in fase 3 na groene golden tests. |
-| F10 | 1 | TODO | | |
+| F10 | 1 | KLAAR | tests/test_requirements.py | requirements.txt (gepind op geteste versies) + requirements-dev.txt; README: pip install -r requirements.txt. bitstring<5 tijdelijk tot F07. |
 | F05 | 2 | TODO | | |
 | F20 | 2 | TODO | | |
 | F31 | 2 | TODO | | |
@@ -77,3 +77,4 @@ Correcties op de opdracht (door Ted akkoord bevonden vóór de start):
 ## Logboek
 - 2026-11-15 17:50 CET start, fase 0 (0.1 bleek al gedaan door commit 358adea)
 - 2026-11-15 17:55 CET Fase 0 afgerond
+- 2026-11-15 18:05 CET Fase 1 afgerond

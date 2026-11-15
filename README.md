@@ -31,9 +31,10 @@ $ export TTN_NUMBER_OF_RECORDS=0  # How many records you want, set to 0 if you w
 $ export TTN_SINCE_DATE_TIME="2024-11-21T10:00:00Z"
 ````
 
-Install the following pip packages:
+Install the dependencies (Python 3.10 or newer):
 ````bash
-$ pip install bitstring flask folium urllib3 request PyYAML
+$ python -m venv .venv && . .venv/bin/activate
+$ pip install -r requirements.txt
 ````
 
 ### Run webserver with tracking marker on Open Streetmap

@@ -1,0 +1,6 @@
+Flask==3.1.3
+folium==1.0.0
+requests==2.34.2
+PyYAML==6.0.3
+# Temporary: only needed by the old encoder, removed when the encoder is rewritten (audit F07).
+bitstring>=4,<5
