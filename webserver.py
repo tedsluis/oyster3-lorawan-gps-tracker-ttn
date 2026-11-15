@@ -129,7 +129,7 @@ def decode_oyster_payload(payload_base64):
 		movement_status = payload[8]
 		in_trip = bool(movement_status & 0b00000001)               # Bit 0    1=Moving, 0=Stationary
 		fix_failed = bool(movement_status & 0b00000010)            # Bit 1    1=failed, 0=success
-		heading_deg = int((movement_status & 0b01111100) * 5.625)  # bit 2-7 degrees
+		heading_deg = (movement_status >> 2) * 5.625               # bits 2-7, LSb = 5.625 degrees
 	except:
 		in_trip = False
 		fix_failed = True
@@ -139,7 +139,7 @@ def decode_oyster_payload(payload_base64):
 	except:
 		speed_kmph = 0
 	try:
-		battery = int(payload[10] * 25) / 1000                     # Convert battery to mVolt
+		battery = round(payload[10] * 0.025, 3)                    # LSb = 25 mV, result in volt
 	except:
 		battery = 0
 	return (gps_lat,gps_lon,battery,in_trip,fix_failed,heading_deg,speed_kmph)

@@ -14,10 +14,10 @@ Fase: 2 · Bezig met: - · Tests: 7 groen
 | F06 | 1 | KLAAR | tests/test_webserver_settings.py | Default 127.0.0.1 + debug uit; APP_HOST/APP_PORT/APP_DEBUG. README: firewall-advies vervangen door WSGI+reverse proxy-uitleg. |
 | LOCK zendslot | 1 | KLAAR | tests/test_send_lock.py | configure-using-downlinks.py --send stopt direct (exit≠0, melding 'audit F01'). Gaat er pas af in fase 3 na groene golden tests. |
 | F10 | 1 | KLAAR | tests/test_requirements.py | requirements.txt (gepind op geteste versies) + requirements-dev.txt; README: pip install -r requirements.txt. bitstring<5 tijdelijk tot F07. |
-| F05 | 2 | TODO | | |
+| F05 | 2 | KLAAR | tests/test_uplinks.py, tests/test_webserver_decoding.py | Koers = (byte8>>2)*5.625 in oyster3/uplinks.py en webserver.py. Eigenschapstest 64 waarden. Lokaal: 3.985 port-1-records, 0 met koers ≥ 360. |
 | F20 | 2 | TODO | | |
-| F31 | 2 | TODO | | |
-| F08 (decoder) | 2 | TODO | | |
+| F31 | 2 | KLAAR | tests/test_webserver_decoding.py | Batterij in volt (LSb 25 mV), comment gecorrigeerd. |
+| F08 (decoder) | 2 | KLAAR | tests/test_uplinks.py::test_only_gnss_uplinks_are_positions | decode_uplink geeft per poort een type; POSITION_PORTS = {1,4,33}. Plotten volgt in fase 6. |
 | F04 | 3 | TODO | | |
 | A2 | 3 | TODO | | |
 | F26 | 3 | TODO | | |
