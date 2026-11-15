@@ -7,6 +7,8 @@ import argparse
 import struct
 from datetime import datetime, timedelta
 
+from oyster3.uplinks import decode_uplink
+
 parser = argparse.ArgumentParser(description="Accept a parameter --downlink with an argument (0-36), --sequencenumber [0-127]")
 parser.add_argument("--downlink", type=int, choices=range(0, 37), required=True, help="Specify --downlink [0-36].")
 parser.add_argument("--sequencenumber", type=int, choices=range(0, 127), required=True, help="Specify --sequencenumber [0-127].")
@@ -71,17 +73,12 @@ def read_uplinks(sequence_number,downlink):
                 else:
                     print(f"NO_MATCH: acknowledged: received_at: {received_at}, sequence number: {ack_sequence_number}, accepted: {accepted}, downlink_port_number: {downlink_port_number}")
 
-            elif f_port == 3 and parsed_date > current_date:
-                initial_battery_voltage=int(payload[0] & 0b00000111) # 0.0 - 0.3 Initial battery voltage, LSb = 100 mV, 4V offset 
-                tx_count=int(payload[0] & 0b00000111) * 128 + int(payload[1] & 0b11111110)  # 0.4 - 1.6 Tx count, LSb = 32 Tx attempts 
-                trip_count=int(payload[1] & 0b00000001) * 32 * 128 +int(payload[2] & 0b11111111) * 32 +int(payload[3] & 0b11110000) # 1.7 - 3.3 Trip count, LSb = 32 trips 
-                # 3.4 - 4.5 GNSS Successes, LSb = 32 fixes 
-                # 4.6 - 5.5 GNSS Failures, LSb = 32 failed fixes 
-                # 5.6 - 6.6 Average GNSS fix time, calculated over successful fixes only, seconds 
-                # 6.7 - 7.7 Average GNSS fail time, calculated over failed fixes only, seconds
-                print(f"initial_battery_voltage: {initial_battery_voltage}")
-                print(f"tx_count: {tx_count}")
-                print(f"trip_count: {trip_count}")
+            elif f_port in (3, 31) and parsed_date > current_date:
+                stats = decode_uplink(f_port, payload)
+                print(f"{stats['type']} received_at: {received_at}")
+                for key, value in stats.items():
+                    if key not in ("type", "f_port"):
+                        print(f"  {key}: {value}")
 
 
 read_uplinks(args.sequencenumber,args.downlink)

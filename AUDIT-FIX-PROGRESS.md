@@ -2,7 +2,7 @@
 Branch: fix/audit-2026-11 · Basiscommit: 358adea · Laatst bijgewerkt: 2026-11-15 17:50 CET
 
 ## Huidige stand
-Fase: 2 · Bezig met: - · Tests: 7 groen
+Fase: 3 · Bezig met: - · Tests: 104 groen
 
 ## Items
 | ID | Fase | Status | Test(s) | Notitie |
@@ -15,7 +15,7 @@ Fase: 2 · Bezig met: - · Tests: 7 groen
 | LOCK zendslot | 1 | KLAAR | tests/test_send_lock.py | configure-using-downlinks.py --send stopt direct (exit≠0, melding 'audit F01'). Gaat er pas af in fase 3 na groene golden tests. |
 | F10 | 1 | KLAAR | tests/test_requirements.py | requirements.txt (gepind op geteste versies) + requirements-dev.txt; README: pip install -r requirements.txt. bitstring<5 tijdelijk tot F07. |
 | F05 | 2 | KLAAR | tests/test_uplinks.py, tests/test_webserver_decoding.py | Koers = (byte8>>2)*5.625 in oyster3/uplinks.py en webserver.py. Eigenschapstest 64 waarden. Lokaal: 3.985 port-1-records, 0 met koers ≥ 360. |
-| F20 | 2 | TODO | | |
+| F20 | 2 | KLAAR | tests/test_uplinks.py::test_port3_spec_example, ::test_port31_spec_example | uplinks.py gebruikt decode_uplink voor port 3 en 31 (port 31 was niet gedecodeerd). Volledige CLI-herbouw in fase 4. |
 | F31 | 2 | KLAAR | tests/test_webserver_decoding.py | Batterij in volt (LSb 25 mV), comment gecorrigeerd. |
 | F08 (decoder) | 2 | KLAAR | tests/test_uplinks.py::test_only_gnss_uplinks_are_positions | decode_uplink geeft per poort een type; POSITION_PORTS = {1,4,33}. Plotten volgt in fase 6. |
 | F04 | 3 | TODO | | |
@@ -78,3 +78,4 @@ Correcties op de opdracht (door Ted akkoord bevonden vóór de start):
 - 2026-11-15 17:50 CET start, fase 0 (0.1 bleek al gedaan door commit 358adea)
 - 2026-11-15 17:55 CET Fase 0 afgerond
 - 2026-11-15 18:05 CET Fase 1 afgerond
+- 2026-11-15 18:25 CET Fase 2 afgerond
