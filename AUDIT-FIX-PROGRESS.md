@@ -35,7 +35,7 @@ Fase: 5 · Bezig met: - · Tests: 346 groen
 | F12 | 4 | KLAAR | tests/test_ttn.py::test_wait_for_ack_*, ::test_find_ack_matches_sequence_and_port, tests/test_ack_cli.py | Aware UTC (eigen parser, ook nanoseconden), match op sequence én poort, stopt na MATCH (ook ack.py), --attempts/--interval instelbaar, ack.py --history. Sequence in de wachtlus komt uit de verzonden payload. |
 | F22 | 4 | KLAAR | tests/test_ttn.py::test_wait_for_ack_stops_after_match_and_only_asks_for_new_uplinks | Pollen met after=<verzendtijd − 1 min> en limit=100. README-tekst volgt in fase 7 (F27/A4). |
 | F11 | 4 | KLAAR | tests/test_ttn.py::test_reading_and_sending_use_separate_keys, ::test_example_environment_file_has_placeholders_only, ::test_downlink_key_falls_back_to_api_key | Codedeel: optionele TTN_DOWNLINK_API_KEY (terugval TTN_API_KEY), export-env-vars.sh.example met placeholders, README: alleen-lezen key, aparte downlink-key, chmod 600, roteren. Key roteren/splitsen in de TTN Console: WACHT-OP-TED (zie Open vragen). |
-| F09 | 5 | TODO | | |
+| F09 | 5 | KLAAR | tests/test_store.py, tests/test_fetch_and_import.py, tests/test_requirements.py::test_readme_documents_retention_and_scheduled_fetch | SQLite-store (data/ 0700, db 0600, idempotente upsert), fetch.py (incrementeel, schrijft alleen bij HTTP 200, --export-tsv met specdecoder), import-snapshots.py. Lokale import: 349 bestanden → 3.998 uniek (port 1: 3.985, 2: 7, 3: 3, 31: 3) = audit. README: 30 dagen retentie, cron + systemd-timer. '7 days'-comment verdwenen. |
 | F13 | 5 | TODO | tests/test_ttn.py::test_fetch_uplinks_without_limit_when_number_of_records_is_zero | Deel klaar (fase 4): TTN_NUMBER_OF_RECORDS als int, 0/leeg = geen limit. Rest in fase 5. |
 | F08 | 6 | TODO | | |
 | F15 | 6 | TODO | | |

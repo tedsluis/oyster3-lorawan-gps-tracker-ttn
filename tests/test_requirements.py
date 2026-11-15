@@ -30,3 +30,11 @@ def test_readme_installs_from_requirements_file():
     readme = (REPO / "README.md").read_text()
     assert "pip install -r requirements.txt" in readme
     assert not re.search(r"pip install [^\n]*\brequest\b(?!s)", readme)
+
+
+def test_readme_documents_retention_and_scheduled_fetch():
+    readme = (REPO / "README.md").read_text()
+    assert "30 days" in readme
+    assert "24 hours on The Things Stack Sandbox" in readme
+    assert "fetch.py" in readme and "OnCalendar=" in readme and "crontab" in readme
+    assert "7 days" not in readme

@@ -65,6 +65,45 @@ By default the webserver only listens on `127.0.0.1` and the Flask debugger is o
 
 ![alt text](map-example.png)
 
+### Keep a local copy of your data
+
+The Things Stack Cloud keeps uplinks in the Storage Integration for **30 days** (24 hours on The Things Stack Sandbox). Anything you have not fetched within that period is lost. `fetch.py` copies new uplinks into a local SQLite database (`data/uplinks.sqlite3`, readable only by you), asking only for uplinks after the newest one it already has. It is safe to run as often as you like.
+
+````bash
+$ python ./fetch.py                      # fetch new uplinks into data/uplinks.sqlite3
+$ python ./fetch.py --export-tsv out.tsv # export everything as tab-separated values
+$ python ./import-snapshots.py           # one-off: import old json/*.json snapshots
+````
+
+Run `fetch.py` at least once a day. With cron (`crontab -e`):
+````
+15 * * * * cd /path/to/oyster3-lorawan-gps-tracker-ttn && . ./export-env-vars.sh && .venv/bin/python fetch.py >> data/fetch.log 2>&1
+````
+
+Or with a systemd user timer, `~/.config/systemd/user/oyster3-fetch.service`:
+````ini
+[Unit]
+Description=Fetch Oyster 3 uplinks from TTN
+
+[Service]
+Type=oneshot
+WorkingDirectory=/path/to/oyster3-lorawan-gps-tracker-ttn
+ExecStart=/bin/bash -c '. ./export-env-vars.sh && exec .venv/bin/python fetch.py'
+````
+and `~/.config/systemd/user/oyster3-fetch.timer`:
+````ini
+[Unit]
+Description=Fetch Oyster 3 uplinks every hour
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+````
+Enable it with `systemctl --user enable --now oyster3-fetch.timer`.
+
 ### Configure Oyster3-lorawan using downlinks
 
 Configuring the Digital Matter Oyster3 LoRaWAN GPS Tracker involves sending downlink messages from your LoRaWAN network server, such as The Things Network (TTN). Downlinks are used to update the device's settings remotely, enabling you to customize its behavior for specific use cases like asset tracking, fleet management, or environmental monitoring.
