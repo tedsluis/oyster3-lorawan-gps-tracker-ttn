@@ -347,6 +347,14 @@ def index():
 	# Render the map HTML file in Flask
 	return render_template('map.html',start_datetime=start_datetime,end_datetime=end_datetime,show_in_trip=show_in_trip,show_fix_failed=show_fix_failed,show_stopped=show_stopped,show_fix_successful=show_fix_successful)
 
+def run_settings(environ=os.environ):
+	"""Safe defaults: local only, debugger off. Override with APP_HOST, APP_PORT, APP_DEBUG."""
+	host = environ.get("APP_HOST", "127.0.0.1")
+	port = int(environ.get("APP_PORT", "5000"))
+	debug = environ.get("APP_DEBUG", "").strip().lower() in ("1", "true", "yes", "on")
+	return host, port, debug
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',debug=True)
+	host, port, debug = run_settings()
+	app.run(host=host, port=port, debug=debug)
 

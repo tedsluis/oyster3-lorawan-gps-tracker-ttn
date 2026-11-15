@@ -36,11 +36,6 @@ Install the following pip packages:
 $ pip install bitstring flask folium urllib3 request PyYAML
 ````
 
-You may need to open port 5000 in the firewall:
-````bash
-$ sudo firewall-cmd --permanent --add-port=5000/tcp
-````
-
 ### Run webserver with tracking marker on Open Streetmap
 
 The webserver.py script is designed to provide a lightweight, local web server (flask & Folium) interface for visualizing GPS data from the Oyster3 LoRaWAN GPS Tracker on Open Streeetmap. It enables users to select GPS data from a specific data and view the route using GPS markers in a user-friendly way through a browser-based interface.
@@ -52,6 +47,8 @@ Start the webserver:
 $ python ./webserver.py
 ````
 View in the webbrowser: http://localhost:5000
+
+By default the webserver only listens on `127.0.0.1` and the Flask debugger is off. You can change this with `APP_HOST`, `APP_PORT` and `APP_DEBUG=1`, but never enable the debugger on a host that others can reach: it allows arbitrary code execution. Do not open the port in your firewall. If you need access from other machines, run the app with a production WSGI server (for example gunicorn or waitress) behind a reverse proxy with authentication.
 
 ![alt text](map-example.png)
 
