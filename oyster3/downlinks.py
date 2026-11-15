@@ -132,3 +132,24 @@ def validate_config(config):
         problems.extend(validate_layout(port, fields))
         problems.extend(validate_types(port, fields))
     return problems
+
+
+def _normalise(value):
+    if isinstance(value, bool):
+        return int(value)
+    if isinstance(value, str):
+        text = value.strip().replace(" ", "")
+        if text.endswith("B"):
+            return int(text[:-1], 2)
+        if text.endswith("H"):
+            return int(text[:-1], 16)
+    return value
+
+
+def non_default_fields(fields):
+    """Fields whose value differs from their 'default' (the sequence number has no default)."""
+    return [
+        field
+        for field in fields
+        if "default" in field and _normalise(field["value"]) != _normalise(field["default"])
+    ]
