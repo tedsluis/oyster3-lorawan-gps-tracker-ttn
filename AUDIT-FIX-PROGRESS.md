@@ -25,9 +25,9 @@ Fase: 3 · Bezig met: - · Tests: 104 groen
 | F02 | 3 | KLAAR | tests/test_downlink_encoder.py::test_dl30_multi_byte_fields_are_little_endian, ::test_dl7_channel_mask_is_little_endian, ::test_dl8_join_eui_stays_big_endian | Meerbytevelden little-endian; alleen endian: big (DL8 JoinEUI) big-endian. |
 | F07 | 3 | KLAAR | tests/test_requirements.py | bitstring verwijderd uit code en requirements.txt. De oude voorbeelduitvoer in de README (kolomkop 'Bitstring') wordt in fase 7 (F27) opnieuw gegenereerd. |
 | F16 | 3 | KLAAR | tests/test_downlink_validation.py | parse_value strikt (boolean alleen true/false/0/1; B/H-suffix alleen bij integer-types); waarde moet passen (nooit afkappen); signed via two's complement na bereikcontrole; min/max afgedwongen; foutmelding noemt het veld; CLI geeft exit 2 i.p.v. een payload. |
-| F25 | 3 | TODO | | |
+| F25 | 3 | KLAAR | tests/test_cli_arguments.py | --downlink alleen 1-12 en 30-35 (configure, ack.py, uplinks.py); sequence 0-127 inclusief. Overbodige ack-argumenten van uplinks.py verdwijnen in fase 4. |
 | A3 | 3 | TODO | | |
-| A6 | 3 | TODO | | |
+| A6 | 3 | KLAAR | tests/test_cli_arguments.py::test_configure_sequence_override_is_used_in_payload, tests/test_downlink_encoder.py::test_sequence_override | --sequencenumber overschrijft de waarde uit config.yaml. |
 | UNLOCK zendslot eraf | 3 | TODO | | |
 | F17 | 4 | TODO | | |
 | F14 | 4 | TODO | | |

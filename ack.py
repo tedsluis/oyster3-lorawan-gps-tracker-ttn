@@ -6,9 +6,9 @@ import base64
 import argparse
 from datetime import datetime, timedelta
 
-parser = argparse.ArgumentParser(description="Accept a parameter --downlink with an argument (0-36), --sequencenumber [0-127]")
-parser.add_argument("--downlink", type=int, choices=range(0, 37), required=True, help="Specify --downlink [0-36].")
-parser.add_argument("--sequencenumber", type=int, choices=range(0, 127), required=True, help="Specify --sequencenumber [0-127].")
+parser = argparse.ArgumentParser(description="Check downlink acknowledgements (--downlink 1-12 or 30-35, --sequencenumber 0-127)")
+parser.add_argument("--downlink", type=int, choices=[*range(1, 13), *range(30, 36)], required=True, help="Downlink port: 1-12 or 30-35.")
+parser.add_argument("--sequencenumber", type=int, choices=range(0, 128), metavar="0-127", required=True, help="Downlink sequence number 0-127.")
 args = parser.parse_args()
 
 def check_downlink_ack(sequence_number,downlink):
