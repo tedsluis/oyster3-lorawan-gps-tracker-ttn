@@ -331,3 +331,37 @@ def test_example_environment_file_has_placeholders_only():
         assert name in text
     keys = [line for line in text.splitlines() if "NNSXS." in line]
     assert keys and all("REPLACE-WITH" in line for line in keys)
+
+
+class StorageAPI:
+    """Fake Storage Integration that honours after (inclusive), order and limit."""
+
+    def __init__(self, records):
+        self.records = sorted(records, key=lambda r: r["result"]["received_at"])
+        self.calls = []
+
+    def get(self, url, params=None, **kwargs):
+        self.calls.append(dict(params))
+        selected = [
+            r for r in self.records if r["result"]["received_at"] >= params.get("after", "")
+        ]
+        if params.get("limit"):
+            selected = selected[: int(params["limit"])]
+        return FakeResponse(200, body(*selected))
+
+
+def test_wait_for_ack_pages_past_many_uplinks(config, monkeypatch):
+    # Review finding: with limit=100 and oldest-first order a recent ack was never returned
+    records = [
+        record(f"2030-01-01T{h:02d}:{m:02d}:00Z", 1, "53AB783C0421F98E940AB3")
+        for h in range(10, 13)
+        for m in range(0, 60)
+    ]
+    records.append(ack_record("2030-01-01T13:30:00Z", 11, 1))
+    api = StorageAPI(records)
+    monkeypatch.setattr(ttn.requests, "get", api.get)
+    since = datetime(2030, 1, 1, 9, 0, tzinfo=UTC)
+    found = wait_for_ack(config, 11, 1, since, attempts=1, sleep=lambda s: None, log=print)
+    assert found is not None and found["sequence"] == 11
+    assert len(api.calls) == 2
+    assert api.calls[1]["after"] == records[99]["result"]["received_at"]

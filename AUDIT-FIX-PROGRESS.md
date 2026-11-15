@@ -2,7 +2,7 @@
 Branch: fix/audit-2026-11 · Basiscommit: 358adea · Laatst bijgewerkt: 2026-11-15 17:50 CET
 
 ## Huidige stand
-Fase: 7 · Bezig met: - · Tests: 412 groen
+Fase: 8 · Bezig met: 8 eindcontrole · Tests: zie eindcontrole
 
 ## Items
 | ID | Fase | Status | Test(s) | Notitie |
@@ -69,6 +69,7 @@ Correcties op de opdracht (door Ted akkoord bevonden vóór de start):
 8. Python 3.10: eigen timestampparser (geen `Z`/nanoseconden in `fromisoformat`); lokaal alleen 3.15 beschikbaar, 3.10 wordt in CI getest.
 
 ## Afwijkingen t.o.v. audit
+- Review 8.5: de F22-fix (limit=100, oudste eerst) liet ack.py een recente ack missen bij >100 uplinks in het venster. Opgelost met paginering (after schuift door per pagina); test test_wait_for_ack_pages_past_many_uplinks.
 - F28: de git rm van docs/*.pdf stond al gestaged en is meegegaan in commit f8cb9a3 (F18). Niet teruggedraaid (geen history-rewrite); de README-kant van F28 zit in de F27-commit.
 - F27: het oude decodervoorbeeld in de README (port 1) bevatte coördinaten die van het eigen apparaat kunnen zijn en was ongeldige hex (oneven lengte); vervangen door het specvoorbeeld. Het staat nog wel in de Git-historie.
 - Webserver (F08, F13, F15, F19, F23, F24) in één commit: het is één herschreven request-pipeline (bron → selectie → rendering → invoer); per bevinding is er een eigen test. F15 is uit fase 6 naar voren gehaald om tests nooit naar templates/map_content.html te laten schrijven.
@@ -91,3 +92,4 @@ Correcties op de opdracht (door Ted akkoord bevonden vóór de start):
 - 2026-11-15 20:05 CET Fase 4 afgerond (fasecontrole: geen requests.-aanroep buiten oyster3/ttn.py; alle HTTP-tests gemockt incl. 401, timeout, lege respons)
 - 2026-11-15 20:50 CET Fase 5 afgerond (fasecontrole: GET / doet 0 HTTP-aanroepen en schrijft 0 bestanden)
 - 2026-11-15 21:00 CET Fase 6 afgerond (fasecontrole: app draait zonder schrijfrechten op templates/)
+- 2026-11-15 21:40 CET Fase 7 afgerond (fasecontrole: relatieve README-links bestaan; geen TODO of 'Byte Array: 02' in de README)

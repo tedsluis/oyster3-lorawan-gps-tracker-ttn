@@ -176,17 +176,37 @@ def find_ack(acks, sequence, port):
     return None
 
 
+def fetch_all_after(config, after, page_size=100, max_pages=1000):
+    """All stored uplinks after ``after``, fetched in pages of ``page_size`` (oldest first).
+    Each next page starts at the last received_at of the previous one."""
+    results, seen, cursor = [], set(), after
+    for _ in range(max_pages):
+        page = fetch_uplinks(config, after=cursor, limit=page_size)
+        for result in page:
+            if result.get("received_at") not in seen:
+                seen.add(result.get("received_at"))
+                results.append(result)
+        if len(page) < page_size:
+            break
+        last = page[-1].get("received_at")
+        if not last or last == cursor:
+            break
+        cursor = last
+    return results
+
+
 def wait_for_ack(
     config, sequence, port, since: datetime, attempts=60, interval=30, sleep=time.sleep, log=print
 ):
     """Poll the Storage Integration for the acknowledgement of one downlink.
 
     The device sends the ack once, with its next uplink, and the Storage Integration writes
-    in batches, so this can take a long time. Only uplinks after ``since`` are requested."""
+    in batches, so this can take a long time. Only uplinks after ``since`` are requested,
+    page by page, so a recent ack is found even when many uplinks arrived since then."""
     window_start = since - timedelta(minutes=1)  # tolerate a small clock difference
     for attempt in range(1, attempts + 1):
         try:
-            results = fetch_uplinks(config, after=window_start, limit=100)
+            results = fetch_all_after(config, window_start)
         except TTNError as error:
             log(f"Attempt {attempt}/{attempts}: {error}")
         else:
