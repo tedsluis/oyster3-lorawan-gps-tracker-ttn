@@ -20,16 +20,28 @@ Important: Setup the Oyster 3 device in TTN (The Thing Network): https://support
 
 TTN is free completly if you have less than 10 devices.
 
-Export the following environment variables with our own configuration:
+Configure your own TTN settings via environment variables. Copy the example file, fill in your values and load it:
 ````bash
-$ export TTN_DEVICE="TTN device id"
-$ export TTN_APPLICATION="TTN application name"
-$ export TTN_REGION="TTN region"
-$ export TTN_CONSOLE="TTN console name"
-$ export TTN_API_KEY="TTN API key"
-$ export TTN_NUMBER_OF_RECORDS=0  # How many records you want, set to 0 if you want everything available
-$ export TTN_SINCE_DATE_TIME="2024-11-21T10:00:00Z"
+$ cp export-env-vars.sh.example export-env-vars.sh
+$ chmod 600 export-env-vars.sh      # the file contains API keys; it is ignored by git
+$ . ./export-env-vars.sh
 ````
+
+| Variable | Meaning |
+|---|---|
+| `TTN_DEVICE` | TTN end device id |
+| `TTN_APPLICATION` | TTN application id |
+| `TTN_REGION` | Cluster region of your console, e.g. `eu1` |
+| `TTN_CONSOLE` | Tenant / console name |
+| `TTN_API_KEY` | API key used to read the Storage Integration |
+| `TTN_DOWNLINK_API_KEY` | Optional API key used only to send downlinks (falls back to `TTN_API_KEY`) |
+| `TTN_NUMBER_OF_RECORDS` | Maximum records per request, `0` = no limit |
+| `TTN_SINCE_DATE_TIME` | Start of the first fetch, e.g. `2024-11-21T10:00:00Z` |
+
+API keys:
+* Give the key in `TTN_API_KEY` only the right `RIGHT_APPLICATION_TRAFFIC_READ`. The webserver and the fetch/ack scripts never need more.
+* Create a separate key with downlink (traffic write) rights for `TTN_DOWNLINK_API_KEY`, and only load it when you configure the device.
+* Keep `export-env-vars.sh` private (`chmod 600`). If the file was ever shared or committed, revoke the keys in the TTN Console and create new ones.
 
 Install the dependencies (Python 3.10 or newer):
 ````bash

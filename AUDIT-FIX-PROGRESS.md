@@ -2,7 +2,7 @@
 Branch: fix/audit-2026-11 · Basiscommit: 358adea · Laatst bijgewerkt: 2026-11-15 17:50 CET
 
 ## Huidige stand
-Fase: 4 · Bezig met: - · Tests: 295 groen
+Fase: 5 · Bezig met: - · Tests: 346 groen
 
 ## Items
 | ID | Fase | Status | Test(s) | Notitie |
@@ -34,7 +34,7 @@ Fase: 4 · Bezig met: - · Tests: 295 groen
 | F21 | 4 | KLAAR | tests/test_ttn.py::test_parse_storage_response* (7 varianten + API-fout + ongeldige JSON) | parse_storage_response: regel voor regel, lege regels overslaan, met/zonder event-stream. |
 | F12 | 4 | KLAAR | tests/test_ttn.py::test_wait_for_ack_*, ::test_find_ack_matches_sequence_and_port, tests/test_ack_cli.py | Aware UTC (eigen parser, ook nanoseconden), match op sequence én poort, stopt na MATCH (ook ack.py), --attempts/--interval instelbaar, ack.py --history. Sequence in de wachtlus komt uit de verzonden payload. |
 | F22 | 4 | KLAAR | tests/test_ttn.py::test_wait_for_ack_stops_after_match_and_only_asks_for_new_uplinks | Pollen met after=<verzendtijd − 1 min> en limit=100. README-tekst volgt in fase 7 (F27/A4). |
-| F11 | 4 | TODO | | Codedeel; key roteren/splitsen doet Ted. |
+| F11 | 4 | KLAAR | tests/test_ttn.py::test_reading_and_sending_use_separate_keys, ::test_example_environment_file_has_placeholders_only, ::test_downlink_key_falls_back_to_api_key | Codedeel: optionele TTN_DOWNLINK_API_KEY (terugval TTN_API_KEY), export-env-vars.sh.example met placeholders, README: alleen-lezen key, aparte downlink-key, chmod 600, roteren. Key roteren/splitsen in de TTN Console: WACHT-OP-TED (zie Open vragen). |
 | F09 | 5 | TODO | | |
 | F13 | 5 | TODO | tests/test_ttn.py::test_fetch_uplinks_without_limit_when_number_of_records_is_zero | Deel klaar (fase 4): TTN_NUMBER_OF_RECORDS als int, 0/leeg = geen limit. Rest in fase 5. |
 | F08 | 6 | TODO | | |
@@ -72,6 +72,7 @@ Correcties op de opdracht (door Ted akkoord bevonden vóór de start):
 - Tijdelijk: ruff sluit de nog niet herschreven legacy-scripts uit (webserver.py, ack.py, uplinks.py, read-json.py) en negeert E501 in de legacy send-code van configure-using-downlinks.py. Wordt opgeheven zodra die bestanden in fase 4-6 herschreven zijn.
 
 ## Open vragen voor Ted
+- F11: maak in de TTN Console een alleen-lezen key (RIGHT_APPLICATION_TRAFFIC_READ) voor TTN_API_KEY en een aparte downlink-key voor TTN_DOWNLINK_API_KEY. Roteer de huidige key als export-env-vars.sh ooit gedeeld is.
 
 ## Vervolg (buiten scope)
 
@@ -81,3 +82,4 @@ Correcties op de opdracht (door Ted akkoord bevonden vóór de start):
 - 2026-11-15 18:05 CET Fase 1 afgerond
 - 2026-11-15 18:25 CET Fase 2 afgerond
 - 2026-11-15 19:20 CET Fase 3 afgerond (fasecontrole: bitstring uit code/requirements; dry-run 18 downlinks = golden-kolom via tests/test_downlink_encoder.py::test_cli_dry_run_prints_golden_payload)
+- 2026-11-15 20:05 CET Fase 4 afgerond (fasecontrole: geen requests.-aanroep buiten oyster3/ttn.py; alle HTTP-tests gemockt incl. 401, timeout, lege respons)

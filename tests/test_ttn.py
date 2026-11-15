@@ -305,3 +305,29 @@ def test_ack_window_tolerates_small_clock_difference(config, http):
         is not None
     )
     assert since - timedelta(minutes=1) < datetime(2025, 1, 5, 12, 59, 30, tzinfo=UTC)
+
+
+def test_reading_and_sending_use_separate_keys(http):
+    calls, _ = http
+    config = TTNConfig.from_env({**DUMMY_ENV, "TTN_DOWNLINK_API_KEY": "NNSXS.WRITE"})
+    fetch_uplinks(config)
+    push_downlink(config, 9, b"\x01")
+    assert calls["get"][0]["headers"]["Authorization"] == f"Bearer {DUMMY_ENV['TTN_API_KEY']}"
+    assert calls["post"][0]["headers"]["Authorization"] == "Bearer NNSXS.WRITE"
+
+
+def test_example_environment_file_has_placeholders_only():
+    text = (REPO / "export-env-vars.sh.example").read_text()
+    for name in (
+        "TTN_DEVICE",
+        "TTN_APPLICATION",
+        "TTN_REGION",
+        "TTN_CONSOLE",
+        "TTN_API_KEY",
+        "TTN_DOWNLINK_API_KEY",
+        "TTN_NUMBER_OF_RECORDS",
+        "TTN_SINCE_DATE_TIME",
+    ):
+        assert name in text
+    keys = [line for line in text.splitlines() if "NNSXS." in line]
+    assert keys and all("REPLACE-WITH" in line for line in keys)
