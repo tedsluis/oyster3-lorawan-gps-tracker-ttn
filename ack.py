@@ -1,76 +1,84 @@
-import os
-import requests
-import time
-import json
-import base64
+#!/usr/bin/env python3
+"""Check Oyster 3 downlink acknowledgements (Uplink 2) in the TTN Storage Integration."""
+
 import argparse
-from datetime import datetime, timedelta
+import sys
+from datetime import timedelta
 
-parser = argparse.ArgumentParser(description="Accept a parameter --downlink with an argument (0-36), --sequencenumber [0-127]")
-parser.add_argument("--downlink", type=int, choices=range(0, 37), required=True, help="Specify --downlink [0-36].")
-parser.add_argument("--sequencenumber", type=int, choices=range(0, 127), required=True, help="Specify --sequencenumber [0-127].")
-args = parser.parse_args()
+from oyster3.downlinks import VALID_PORTS
+from oyster3.timeutil import utc_now
+from oyster3.ttn import (
+    TTNConfig,
+    TTNError,
+    downlink_acks,
+    fetch_uplinks,
+    format_ack,
+    wait_for_ack,
+)
 
-def check_downlink_ack(sequence_number,downlink):
-    ttnDevice = os.environ["TTN_DEVICE"]
-    ttnApplication = os.environ["TTN_APPLICATION"]
-    ttnRegion = os.environ["TTN_REGION"]
-    ttnConsole = os.environ["TTN_CONSOLE"]
-    ttnAPIKey = os.environ["TTN_API_KEY"]
-    ttnStorageurl = f"https://{ttnConsole}.{ttnRegion}.cloud.thethings.industries/api/v3/as/applications/{ttnApplication}/devices/{ttnDevice}/packages/storage/uplink_message"
 
-    headers = {
-        "Authorization": f"Bearer {ttnAPIKey}"
-    }
+def parse_args(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--downlink", type=int, choices=VALID_PORTS, help="Downlink port: 1-12 or 30-35."
+    )
+    parser.add_argument(
+        "--sequencenumber",
+        type=int,
+        choices=range(0, 128),
+        metavar="0-127",
+        help="Downlink sequence number 0-127.",
+    )
+    parser.add_argument(
+        "--history",
+        action="store_true",
+        help="List all acknowledgements in the period once, without polling.",
+    )
+    parser.add_argument(
+        "--hours", type=float, default=24, help="Look back this many hours (default 24)."
+    )
+    parser.add_argument("--attempts", type=int, default=60, help="Polling attempts (default 60).")
+    parser.add_argument(
+        "--interval", type=int, default=30, help="Seconds between attempts (default 30)."
+    )
+    args = parser.parse_args(argv)
+    if not args.history and (args.downlink is None or args.sequencenumber is None):
+        parser.error("--downlink and --sequencenumber are required unless --history is given")
+    return args
 
-    for _ in range(60):  # Retry up to 10 times (adjust as needed)
-        try:
-            # Maak een GET-verzoek naar de TTN Storage Integration API
-            response = requests.get(ttnStorageurl, headers=headers)
-        except Exception as e:
-            print(f"Onverwachte fout: {e}")
 
-        # Check response
-        print(f"Response Code: {response.status_code}")
-        if response.status_code != 200:
-            print("Fout bij ophalen van uplinkberichten.")
-            response.raise_for_status()
+def main(argv=None):
+    args = parse_args(argv)
+    since = utc_now() - timedelta(hours=args.hours)
+    try:
+        config = TTNConfig.from_env()
+        if args.history:
+            acks = downlink_acks(fetch_uplinks(config, after=since), since=since)
+            if not acks:
+                print(f"No acknowledgements in the last {args.hours:g} hours.")
+            for ack in acks:
+                print(format_ack(ack))
+            return 0
+    except TTNError as error:
+        print(f"Error: {error}", file=sys.stderr)
+        return 1
+    ack = wait_for_ack(
+        config,
+        args.sequencenumber,
+        args.downlink,
+        since,
+        attempts=args.attempts,
+        interval=args.interval,
+    )
+    if ack is None:
+        print(
+            f"NO_MATCH: no acknowledgement of downlink {args.downlink} with sequence number "
+            f"{args.sequencenumber} after {args.attempts} attempts."
+        )
+        return 1
+    print(f"MATCH: {format_ack(ack)}")
+    return 0
 
-        # Parseer de JSON-response
-        ttnJSON = "{\"data\": [" + response.text.replace("\n", ",")[:-1] + "]}"
-        someJSON = json.loads(ttnJSON)
-        uplink_messages = someJSON["data"]
 
-        # Controleer inkomende uplinks
-        for message in uplink_messages:
-            uplink = message["result"]
-            uplink_message = uplink["uplink_message"]
-            f_port = uplink_message["f_port"]
-            received_at = uplink["received_at"]
-            # Remove the 'Z' at the end of the string for compatibility
-            date_string = received_at.rstrip('Z')
-            # Parse the date string
-            parsed_date = datetime.fromisoformat(date_string)
-            # Get the current date and time
-            current_date = datetime.now() - timedelta(hours=24)
-
-            if f_port == 2 and parsed_date > current_date:
-                frm_payload = uplink_message["frm_payload"]
-                payload = base64.b64decode(frm_payload)
-                ack_sequence_number=int(payload[0] & 0b01111111)   # 0.0 - 0.6 Sequence number (identifies downlink to server)
-                accepted=bool(payload[0] & 0b10000000) # 0.7 0: Downlink rejected, 1: Downlink accepted
-                # 1 Firmware major version
-                # 2 Firmware minor version
-                # 3 Product Id (98)
-                # 4 Hardware revision
-                downlink_port_number=payload[5] # 5 Downlink port number
-
-                if ack_sequence_number == sequence_number and downlink == downlink_port_number:
-                    print(f"MATCH:    acknowledged: received_at: {received_at}, sequence number: {ack_sequence_number}, accepted: {accepted}, downlink_port_number: {downlink_port_number}")
-                else:
-                    print(f"NO_MATCH: acknowledged: received_at: {received_at}, sequence number: {ack_sequence_number}, accepted: {accepted}, downlink_port_number: {downlink_port_number}")
-
-        print(f"Try again in 30 seconds...")
-        time.sleep(30)
-
-check_downlink_ack(args.sequencenumber,args.downlink)
+if __name__ == "__main__":
+    sys.exit(main())

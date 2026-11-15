@@ -1,0 +1,18 @@
+#!/bin/bash
+# Copy to export-env-vars.sh (ignored by git), fill in your own values, then:
+#   chmod 600 export-env-vars.sh && . ./export-env-vars.sh
+
+export TTN_DEVICE="your-device-id"            # TTN end device id
+export TTN_APPLICATION="your-application-id"  # TTN application id
+export TTN_REGION="eu1"                       # cluster region of your console, e.g. eu1, eu2, nam1
+export TTN_CONSOLE="your-tenant"              # tenant / console name (first part of the console URL)
+
+# Read-only key with RIGHT_APPLICATION_TRAFFIC_READ: used to read the Storage Integration.
+export TTN_API_KEY="NNSXS.REPLACE-WITH-READ-ONLY-KEY"
+
+# Optional key with permission to write downlinks, only used by configure-using-downlinks.py
+# --send. Falls back to TTN_API_KEY when not set.
+# export TTN_DOWNLINK_API_KEY="NNSXS.REPLACE-WITH-DOWNLINK-KEY"
+
+export TTN_NUMBER_OF_RECORDS=0                # maximum records per request, 0 = no limit
+export TTN_SINCE_DATE_TIME="2024-11-21T10:00:00Z"  # first fetch starts here (RFC 3339, UTC)

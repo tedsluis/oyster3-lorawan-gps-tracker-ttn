@@ -2,3 +2,8 @@ export-env-vars.sh
 file/*.txt
 json/*.json
 templates/map_content.html
+.venv/
+data/
+__pycache__/
+.pytest_cache/
+.ruff_cache/

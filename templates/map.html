@@ -38,11 +38,22 @@
             padding: 5px;
             font-size: 16px;
         }
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .messages {
+            margin: 6px 0 0 0;
+            padding: 4px 8px;
+            background-color: #fff3cd;
+            color: #664d03;
+            list-style: none;
+        }
         #map {
-            position: absolute;
-            top: 80px; /* Adjust based on header height */
-            bottom: 0;
+            flex: 1;
             width: 100%;
+            border: 0;
         }
     </style>
 </head>
@@ -50,14 +61,42 @@
     <header>
         <h1>GPS Route Map</h1>
         <form method="POST" action="/">
-            <label for="date">Select Date:</label>
-            <input type="date" id="date" name="date" value="{{ selected_date }}">
-            <button type="submit">update</button>
+
+            <label>
+                <input type="checkbox" class="onoffswitch-checkbox" name="stopped_checked" {% if show_stopped %}checked{% endif %}> Show "Stopped" Locations
+            </label>
+
+            <label>
+                <input type="checkbox" class="onoffswitch-checkbox" name="in_trip_checked" {% if show_in_trip %}checked{% endif %}> Show "In Trip" Locations
+            </label>
+            
+            <label>
+                <input type="checkbox" class="onoffswitch-checkbox" name="fix_successful_checked" {% if show_fix_successful %}checked{% endif %}> Show "Fix Successful" Locations
+            </label>
+
+            <label>
+                <input type="checkbox" class="onoffswitch-checkbox" name="fix_failed_checked" {% if show_fix_failed %}checked{% endif %}> Show "Fix Failed" Locations
+            </label>
+            <br>
+            <label for="start_datetime">Start date/time:
+                <input type="datetime-local" id="start_datetime" name="start_datetime" value="{{ start_datetime }}" required />
+            </label>
+
+            <label for="end_datetime">End date/time:
+                <input type="datetime-local" id="end_datetime" name="end_datetime" value="{{ end_datetime }}" required />
+            </label>
+            ({{ timezone }})
+
+            <button type="submit" name="update">update</button>
+            <button type="submit" name="refresh">fetch new data from TTN</button>
         </form>
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+        </ul>
+        {% endif %}
     </header>
-    <div id="map">
-        <!-- Include the map content -->
-        {% include "map_content.html" %}
-    </div>
+    <!-- The map is rendered per request and isolated in its own document. -->
+    <iframe id="map" title="GPS route map" srcdoc="{{ map_html }}"></iframe>
 </body>
 </html>

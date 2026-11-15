@@ -1,0 +1,47 @@
+import re
+
+from tests.conftest import REPO
+
+
+def requirement_names():
+    names = []
+    for line in (REPO / "requirements.txt").read_text().splitlines():
+        line = line.split("#", 1)[0].strip()
+        if line:
+            names.append(re.split(r"[<>=!~ ]", line, maxsplit=1)[0].lower())
+    return names
+
+
+def test_runtime_requirements_are_complete_and_real():
+    names = requirement_names()
+    for needed in ("flask", "folium", "requests", "pyyaml"):
+        assert needed in names
+    assert "request" not in names  # does not exist on PyPI (audit F10)
+
+
+def test_every_requirement_is_pinned():
+    for line in (REPO / "requirements.txt").read_text().splitlines():
+        line = line.split("#", 1)[0].strip()
+        if line:
+            assert re.search(r"(==|<)", line), line
+
+
+def test_readme_installs_from_requirements_file():
+    readme = (REPO / "README.md").read_text()
+    assert "pip install -r requirements.txt" in readme
+    assert not re.search(r"pip install [^\n]*\brequest\b(?!s)", readme)
+
+
+def test_readme_documents_retention_and_scheduled_fetch():
+    readme = (REPO / "README.md").read_text()
+    assert "30 days" in readme
+    assert "24 hours on The Things Stack Sandbox" in readme
+    assert "fetch.py" in readme and "OnCalendar=" in readme and "crontab" in readme
+    assert "7 days" not in readme
+
+
+def test_no_duplicate_or_dead_scripts():
+    # Audit F30: read-json.py duplicated the webserver's snapshot selection
+    assert not (REPO / "read-json.py").exists()
+    for path in list(REPO.glob("*.py")) + list((REPO / "oyster3").glob("*.py")):
+        assert "except:" not in path.read_text(), path.name
