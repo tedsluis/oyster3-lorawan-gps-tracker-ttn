@@ -12,7 +12,7 @@ Fase: 1 · Bezig met: - · Tests: 0 groen
 | 0.3 tooling | 0 | KLAAR | - | venv buiten de repo (/tmp), requirements-dev.txt, pyproject.toml (ruff+pytest), tests/, .gitignore aangevuld. pytest: 0 tests (exit 5), ruff: groen. |
 | 0.4 audit + spec gelezen | 0 | KLAAR | - | Auditrapport en spec §3 volledig gelezen; golden waarden onafhankelijk nagerekend vóór de start. |
 | F06 | 1 | TODO | | |
-| LOCK zendslot | 1 | TODO | | |
+| LOCK zendslot | 1 | KLAAR | tests/test_send_lock.py | configure-using-downlinks.py --send stopt direct (exit≠0, melding 'audit F01'). Gaat er pas af in fase 3 na groene golden tests. |
 | F10 | 1 | TODO | | |
 | F05 | 2 | TODO | | |
 | F20 | 2 | TODO | | |

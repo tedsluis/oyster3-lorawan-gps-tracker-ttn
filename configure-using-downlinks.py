@@ -1,4 +1,5 @@
 import os
+import sys
 import requests
 import base64
 import time
@@ -12,6 +13,12 @@ parser = argparse.ArgumentParser(description="Accept a parameter --downlink with
 parser.add_argument("--downlink", type=int, choices=range(0, 37), required=True, help="Specify --downlink [0-36].")
 parser.add_argument("--send", action="store_true", help="Specify --send to send downlink now.")
 args = parser.parse_args()
+
+# Temporary safety lock: the current encoder writes bit fields in the wrong order.
+SEND_LOCKED = True
+if args.send and SEND_LOCKED:
+    sys.exit("Refusing to send: the downlink encoder is known to be wrong (see audit F01). "
+             "Sending is disabled until the encoder is fixed.")
 
 print(f"Send downlink: {args.send}")
 
