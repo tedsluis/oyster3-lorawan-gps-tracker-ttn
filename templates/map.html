@@ -50,8 +50,31 @@
     <header>
         <h1>GPS Route Map</h1>
         <form method="POST" action="/">
-            <label for="date">Select Date:</label>
-            <input type="date" id="date" name="date" value="{{ selected_date }}">
+
+            <label>
+                <input type="checkbox" class="onoffswitch-checkbox" name="stopped_checked" {% if show_stopped %}checked{% endif %}> Show "Stopped" Locations
+            </label>
+
+            <label>
+                <input type="checkbox" class="onoffswitch-checkbox" name="in_trip_checked" {% if show_in_trip %}checked{% endif %}> Show "In Trip" Locations
+            </label>
+            
+            <label>
+                <input type="checkbox" class="onoffswitch-checkbox" name="fix_successful_checked" {% if show_fix_successful %}checked{% endif %}> Show "Fix Successful" Locations
+            </label>
+
+            <label>
+                <input type="checkbox" class="onoffswitch-checkbox" name="fix_failed_checked" {% if show_fix_failed %}checked{% endif %}> Show "Fix Failed" Locations
+            </label>
+            </br>
+            <label for="date">Start date/time:
+                <input type="datetime-local" id="start_datetime" name="start_datetime" value="{{ start_datetime }}" requiered />
+            </label>
+
+            <label for="date">End date/time:
+                <input type="datetime-local" id="end_datetime" name="end_datetime" value="{{ end_datetime }}" requiered />
+            </label>
+
             <button type="submit">update</button>
         </form>
     </header>

@@ -226,6 +226,24 @@ Rx Time: 04 Mar 2022 14:03:00 GMT
 
 ## Configuration using Downlinks
 
+* 1: Set Trip Parameters
+* 2: Set After-Hours 1
+* 3: Set After-Hours 2
+* 4: Set Time Zone
+* 5: Set GNSS Parameters 1
+* 6: Set GNSS Parameters 2
+* 7: Set LoRaWAN Channels
+* 8: Set LoRaWAN Join / App EUI
+* 9: Set Advanced LoRaWAN Options
+* 10: Set Inactivity Parameters
+* 11: Set Scheduled Upload Parameters
+* 12: Set Scheduled Upload Parameters (continued)
+* 30: Set Device Statistics Parameters
+* 31: Set GNSS Parameters 3
+* 32: Set Accelerometer Parameters
+* 33: Reset ABP Session Counters
+* 34: Reset Statistics Command
+* 35: Poll Command
 
 ### Configuration Downlink Port 1
 Set Trip Parameters
