@@ -18,7 +18,7 @@ Fase: 3 · Bezig met: - · Tests: 104 groen
 | F20 | 2 | KLAAR | tests/test_uplinks.py::test_port3_spec_example, ::test_port31_spec_example | uplinks.py gebruikt decode_uplink voor port 3 en 31 (port 31 was niet gedecodeerd). Volledige CLI-herbouw in fase 4. |
 | F31 | 2 | KLAAR | tests/test_webserver_decoding.py | Batterij in volt (LSb 25 mV), comment gecorrigeerd. |
 | F08 (decoder) | 2 | KLAAR | tests/test_uplinks.py::test_only_gnss_uplinks_are_positions | decode_uplink geeft per poort een type; POSITION_PORTS = {1,4,33}. Plotten volgt in fase 6. |
-| F04 | 3 | TODO | | |
+| F04 | 3 | KLAAR | tests/test_config_layout.py | Validator (naam-offset = byte/bit/length, geen overlap, geen gaten, lengte = spec) + 8 correcties in config.yaml (DL4 ×3, DL6, DL10 byte 6 gesplitst (waarde 1), DL30, DL34, DL35). Validator vond vóór de fix 19 problemen, alle binnen de auditbevindingen. |
 | A2 | 3 | TODO | | |
 | F26 | 3 | TODO | | |
 | F01 | 3 | TODO | | |

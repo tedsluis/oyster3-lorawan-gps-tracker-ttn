@@ -215,8 +215,8 @@ config:
     - name: 1.2 - 2.1 Offset of normal time zone from UTC, LSb = 15 minutes, signed, default 0
       type: signed-integer
       value: 0
-      byte: 0
-      bit: 7
+      byte: 1
+      bit: 2
       length: 8
     - name: 2.2 - 2.5 Daylight saving time shift, LSb = 15 minutes, 0 disables, default 0
       type: integer
@@ -246,8 +246,8 @@ config:
       type: signed-integer
       value: 0
       byte: 4
-      bit: 9
-      length: 4
+      bit: 2
+      length: 9
     - name: 5.3 - 5.5 End of DST Nth day of month, 1= First day, ..., 5= Fifth day, 6= Last day, 0= Use absolute date instead of relative ‘2nd Sunday of October’ , style
       type: integer
       value: 0
@@ -259,7 +259,7 @@ config:
       value: 0
       byte: 5
       bit: 6
-      length: 4
+      length: 5
     - name: 6.3 - 6.6 1-12= January-December
       type: integer
       value: 0
@@ -377,8 +377,8 @@ config:
     - name: 6.6 - 6.7 Reserved, set to zero
       type: boolean
       value: 0
-      byte: 0
-      bit: 7
+      byte: 6
+      bit: 6
       length: 2
     - name: 7 V1 GNSS statistical model, 0= Portable, 2= Stationary,3= Pedestrian, 4= Automotive, 5=  Sea, 6= Air 1G, 7= Air 2G, 8= Air 4G, default 4, ignored on Oyster 3
       type: integer
@@ -561,10 +561,15 @@ config:
       value: 1
       byte: 4
       length: 1
-    - name: 5 V3 Position Uplink, when not in-trip, 0= Auto, others= uplink number 6 GNSS fix every nth heartbeat, >= 1, default 1 (fix every heartbeat)
+    - name: 5 V3 Position Uplink, when not in-trip, 0= Auto, others= uplink number
       type: integer
       value: 1
       byte: 5
+      length: 1
+    - name: 6 GNSS fix every nth heartbeat, >= 1, default 1 (fix every heartbeat)
+      type: integer
+      value: 1
+      byte: 6
       length: 1
     - name: 7.0 - 7.4 Extra end-of-trip heartbeats, default 0
       type: integer
@@ -707,7 +712,7 @@ config:
     - name: 6.1 Disable Uplink 31, default 0 (send)
       type: boolean
       value: 0
-      byte: 0
+      byte: 6
       bit: 1
       length: 1
     - name: 6.2 - 6.7 Reserved, send as zero
@@ -850,7 +855,7 @@ config:
       type: boolean
       value: 0
       byte: 1
-      bit: 0
+      bit: 1
       length: 1
     - name: 1.2 - 1.7 Reserved, set to zero
       type: boolean
@@ -896,7 +901,7 @@ config:
       value: 0
       byte: 1
       bit: 3
-      length: 4
+      length: 5
     - name: 2 - 3 Poll Position Count, 0= cancel, 1-65535= send 1-65535 positions
       type: integer
       value: 0
