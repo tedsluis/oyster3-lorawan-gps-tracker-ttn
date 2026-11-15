@@ -36,12 +36,12 @@ Fase: 5 · Bezig met: - · Tests: 346 groen
 | F22 | 4 | KLAAR | tests/test_ttn.py::test_wait_for_ack_stops_after_match_and_only_asks_for_new_uplinks | Pollen met after=<verzendtijd − 1 min> en limit=100. README-tekst volgt in fase 7 (F27/A4). |
 | F11 | 4 | KLAAR | tests/test_ttn.py::test_reading_and_sending_use_separate_keys, ::test_example_environment_file_has_placeholders_only, ::test_downlink_key_falls_back_to_api_key | Codedeel: optionele TTN_DOWNLINK_API_KEY (terugval TTN_API_KEY), export-env-vars.sh.example met placeholders, README: alleen-lezen key, aparte downlink-key, chmod 600, roteren. Key roteren/splitsen in de TTN Console: WACHT-OP-TED (zie Open vragen). |
 | F09 | 5 | KLAAR | tests/test_store.py, tests/test_fetch_and_import.py, tests/test_requirements.py::test_readme_documents_retention_and_scheduled_fetch | SQLite-store (data/ 0700, db 0600, idempotente upsert), fetch.py (incrementeel, schrijft alleen bij HTTP 200, --export-tsv met specdecoder), import-snapshots.py. Lokale import: 349 bestanden → 3.998 uniek (port 1: 3.985, 2: 7, 3: 3, 31: 3) = audit. README: 30 dagen retentie, cron + systemd-timer. '7 days'-comment verdwenen. |
-| F13 | 5 | TODO | tests/test_ttn.py::test_fetch_uplinks_without_limit_when_number_of_records_is_zero | Deel klaar (fase 4): TTN_NUMBER_OF_RECORDS als int, 0/leeg = geen limit. Rest in fase 5. |
-| F08 | 6 | TODO | | |
-| F15 | 6 | TODO | | |
-| F19 | 6 | TODO | | |
-| F23 | 6 | TODO | | |
-| F24 | 6 | TODO | | |
+| F13 | 5 | KLAAR | tests/test_webserver.py::test_get_makes_no_http_calls_and_writes_no_files, ::test_refresh_* | Webserver leest uit de store; GET doet 0 HTTP-aanroepen en schrijft 0 bestanden; geen json/- of file/-snapshots meer; knop 'fetch new data' roept fetch_new aan, bij een fout lokale data + melding. |
+| F08 | 6 | KLAAR | tests/test_webserver.py::test_only_position_uplinks_are_plotted | Alleen poorten 1, 4 en 33 via decode_uplink; 2/3/30/31 nooit op de kaart. |
+| F15 | 6 | KLAAR | tests/test_webserver.py::test_map_is_not_written_to_templates, ::test_concurrent_requests_get_their_own_map, ::test_app_runs_without_write_access_to_templates | Kaart per request in het geheugen (get_root().render()), getoond via <iframe srcdoc> (autoescaped, geïsoleerd) i.p.v. {{ map_html|safe }} in een div. Naar voren gehaald (vóór de eerste webservertest) zodat tests het uitgesloten templates/map_content.html nooit raken. |
+| F19 | 6 | KLAAR | tests/test_webserver.py::test_local_day_selection_uses_the_app_timezone, tests/test_timeutil.py (zomertijd, middernacht) | Formulier = lokale tijd (APP_TIMEZONE, default Europe/Amsterdam) → UTC; start en eind inclusief (eind t/m :59.999999); popups in lokale tijd met zone. |
+| F23 | 6 | KLAAR | tests/test_webserver.py::test_failed_fix_is_a_cached_marker_outside_the_route | Volgorde: fix_failed (rood, 'cached position') → stilstaand (groen) → snelheid 0 (blauw) → pijl. Regel 'heading 0 → oranje' vervallen (0° = noord). Fix-failed-punten niet in de routelijn. |
+| F24 | 6 | KLAAR | tests/test_webserver.py::test_bad_form_input_falls_back_with_a_message, ::test_template_uses_required_attribute | Ontbrekend/ongeldig/start na eind → default + melding, geen 500. requiered → required. |
 | F30 | 6 | TODO | | |
 | F27 | 7 | TODO | | |
 | F28 | 7 | TODO | | |
@@ -69,6 +69,8 @@ Correcties op de opdracht (door Ted akkoord bevonden vóór de start):
 8. Python 3.10: eigen timestampparser (geen `Z`/nanoseconden in `fromisoformat`); lokaal alleen 3.15 beschikbaar, 3.10 wordt in CI getest.
 
 ## Afwijkingen t.o.v. audit
+- Webserver (F08, F13, F15, F19, F23, F24) in één commit: het is één herschreven request-pipeline (bron → selectie → rendering → invoer); per bevinding is er een eigen test. F15 is uit fase 6 naar voren gehaald om tests nooit naar templates/map_content.html te laten schrijven.
+- F15: iframe srcdoc i.p.v. {{ map_html|safe }} in een div (de kaart is een volledig HTML-document; zo blijft hij geïsoleerd en geldig).
 - Tijdelijk: ruff sluit de nog niet herschreven legacy-scripts uit (webserver.py, ack.py, uplinks.py, read-json.py) en negeert E501 in de legacy send-code van configure-using-downlinks.py. Wordt opgeheven zodra die bestanden in fase 4-6 herschreven zijn.
 
 ## Open vragen voor Ted
