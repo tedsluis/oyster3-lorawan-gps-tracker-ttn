@@ -46,7 +46,7 @@ Fase: 7 · Bezig met: - · Tests: 412 groen
 | F27 | 7 | TODO | | |
 | F28 | 7 | TODO | | |
 | A1 | 7 | OVERGESLAGEN | - | Claim klopt niet: README linkt naar 4 PDF's en alle 4 staan in docs/. Afgedekt door F28 (D2). |
-| F18 | 7 | TODO | | |
+| F18 | 7 | KLAAR | tests/test_repository.py::test_license_is_mit, ::test_ci_runs_lint_and_tests_on_oldest_and_newest_python | LICENSE (MIT, Ted Sluis); .github/workflows/ci.yml: ruff check + format --check + pytest op Python 3.10 en 3.x, geen secrets. Testsuite bestond al (fase 1-6). |
 | F29 | 7 | TODO | | |
 | F03 | 7 | TODO | | Runbook; uitvoeren doet Ted. |
 | A4 | 7 | TODO | | |
