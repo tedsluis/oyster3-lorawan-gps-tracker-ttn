@@ -9,6 +9,8 @@ import re
 
 import yaml
 
+from oyster3.bits import BitWriter, read_field, to_unsigned
+
 # Payload length in bytes per downlink port (Integration spec rev. 1.3, §3.4-3.5).
 SPEC_LENGTHS = {
     1: 8, 2: 9, 3: 7, 4: 8, 5: 8, 6: 10, 7: 11, 8: 9, 9: 7, 10: 9, 11: 11, 12: 3,
@@ -153,3 +155,56 @@ def non_default_fields(fields):
         for field in fields
         if "default" in field and _normalise(field["value"]) != _normalise(field["default"])
     ]
+
+
+SEQUENCE_PREFIX = "0.0 - 0.6 Downlink sequence number"
+
+
+def is_sequence_field(field):
+    return field["name"].startswith(SEQUENCE_PREFIX)
+
+
+def field_value(field, sequence=None):
+    if sequence is not None and is_sequence_field(field):
+        return sequence
+    return _normalise(field["value"])
+
+
+def encode_downlink(port, fields, sequence=None):
+    """Encode one downlink: LSb-first bit fields, little-endian multi-byte fields
+    (unless the field has ``endian: big``), signed fields in two's complement."""
+    writer = BitWriter(SPEC_LENGTHS[port])
+    for field in fields:
+        start, size = field_span(field)
+        value = field_value(field, sequence)
+        signed = field["type"] == "signed-integer"
+        if field.get("endian") == "big":
+            if signed:
+                value = to_unsigned(value, size)
+                signed = False
+            value = int.from_bytes(value.to_bytes(field["length"], "big"), "little")
+        writer.write(start, size, value, signed=signed)
+    return writer.to_bytes()
+
+
+def describe_fields(port, fields, payload, sequence=None):
+    """Rows for the CLI table: what the device reads for every field."""
+    rows = []
+    for field in fields:
+        start, size = field_span(field)
+        raw = read_field(payload, start, size)
+        first_byte, last_byte = start // 8, (start + size - 1) // 8
+        rows.append(
+            [
+                str(port),
+                str(field["byte"]),
+                "-" if field.get("bit") is None else str(field["bit"]),
+                str(field["length"]),
+                field["type"],
+                str(field_value(field, sequence)),
+                format(raw, f"0{size}b"),
+                payload[first_byte : last_byte + 1].hex(),
+                field["name"],
+            ]
+        )
+    return rows

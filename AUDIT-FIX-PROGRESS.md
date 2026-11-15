@@ -21,9 +21,9 @@ Fase: 3 · Bezig met: - · Tests: 104 groen
 | F04 | 3 | KLAAR | tests/test_config_layout.py | Validator (naam-offset = byte/bit/length, geen overlap, geen gaten, lengte = spec) + 8 correcties in config.yaml (DL4 ×3, DL6, DL10 byte 6 gesplitst (waarde 1), DL30, DL34, DL35). Validator vond vóór de fix 19 problemen, alle binnen de auditbevindingen. |
 | A2 | 3 | KLAAR | tests/test_config_layout.py::test_validator_detects_inconsistent_types, ::test_signed_reserved_and_joineui_fields_are_typed | DL6 6.0-6.4 en DL9 byte 5 → signed-integer (DL4 was al goed); 5 meerbits reserved-velden boolean → integer; min/max waar de spec een bereik noemt; endian: big bij DL8 JoinEUI. Validator controleert types. |
 | F26 | 3 | KLAAR | tests/test_config_defaults.py | Echte defaults: DL5 byte 6 = 28 (10 km/h), DL10 bytes 4/5 = 0 (Auto), DL32 byte 1 = 6 (94 mG). default: bij alle 135 velden (behalve sequence). Kopcomment herschreven. CLI-waarschuwing bij afwijkende waarden: zie commit van F01 (test_cli_warns_about_non_default_values). |
-| F01 | 3 | TODO | | |
-| F02 | 3 | TODO | | |
-| F07 | 3 | TODO | | |
+| F01 | 3 | KLAAR | tests/test_downlink_encoder.py (golden 18, sequence, round-trip ×90, CLI dry-run 18) | Nieuwe encoder via BitWriter (LSb-first). CLI herschreven bovenop oyster3/downlinks.py; zendslot blijft tot UNLOCK. |
+| F02 | 3 | KLAAR | tests/test_downlink_encoder.py::test_dl30_multi_byte_fields_are_little_endian, ::test_dl7_channel_mask_is_little_endian, ::test_dl8_join_eui_stays_big_endian | Meerbytevelden little-endian; alleen endian: big (DL8 JoinEUI) big-endian. |
+| F07 | 3 | KLAAR | tests/test_requirements.py | bitstring verwijderd uit code en requirements.txt; grep -ri bitstring (code/requirements/README) = 0. |
 | F16 | 3 | TODO | | |
 | F25 | 3 | TODO | | |
 | A3 | 3 | TODO | | |
@@ -69,6 +69,7 @@ Correcties op de opdracht (door Ted akkoord bevonden vóór de start):
 8. Python 3.10: eigen timestampparser (geen `Z`/nanoseconden in `fromisoformat`); lokaal alleen 3.15 beschikbaar, 3.10 wordt in CI getest.
 
 ## Afwijkingen t.o.v. audit
+- Tijdelijk: ruff sluit de nog niet herschreven legacy-scripts uit (webserver.py, ack.py, uplinks.py, read-json.py) en negeert E501 in de legacy send-code van configure-using-downlinks.py. Wordt opgeheven zodra die bestanden in fase 4-6 herschreven zijn.
 
 ## Open vragen voor Ted
 
