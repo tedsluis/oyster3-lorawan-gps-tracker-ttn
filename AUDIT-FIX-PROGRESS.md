@@ -2,7 +2,7 @@
 Branch: fix/audit-2026-11 · Basiscommit: 358adea · Laatst bijgewerkt: 2026-11-15 17:50 CET
 
 ## Huidige stand
-Fase: 5 · Bezig met: - · Tests: 346 groen
+Fase: 7 · Bezig met: - · Tests: 412 groen
 
 ## Items
 | ID | Fase | Status | Test(s) | Notitie |
@@ -42,7 +42,7 @@ Fase: 5 · Bezig met: - · Tests: 346 groen
 | F19 | 6 | KLAAR | tests/test_webserver.py::test_local_day_selection_uses_the_app_timezone, tests/test_timeutil.py (zomertijd, middernacht) | Formulier = lokale tijd (APP_TIMEZONE, default Europe/Amsterdam) → UTC; start en eind inclusief (eind t/m :59.999999); popups in lokale tijd met zone. |
 | F23 | 6 | KLAAR | tests/test_webserver.py::test_failed_fix_is_a_cached_marker_outside_the_route | Volgorde: fix_failed (rood, 'cached position') → stilstaand (groen) → snelheid 0 (blauw) → pijl. Regel 'heading 0 → oranje' vervallen (0° = noord). Fix-failed-punten niet in de routelijn. |
 | F24 | 6 | KLAAR | tests/test_webserver.py::test_bad_form_input_falls_back_with_a_message, ::test_template_uses_required_attribute | Ontbrekend/ongeldig/start na eind → default + melding, geen 500. requiered → required. |
-| F30 | 6 | TODO | | |
+| F30 | 6 | KLAAR | tests/test_requirements.py::test_no_duplicate_or_dead_scripts + ruff (F401/F841/E722) over de hele repo | read-json.py verwijderd; webserver herschreven zonder dode code/ongebruikte imports/kale excepts; rx_metadata defensief in store.py; tijdelijke ruff-uitsluitingen opgeheven, ruff check + format over alle bestanden. |
 | F27 | 7 | TODO | | |
 | F28 | 7 | TODO | | |
 | A1 | 7 | OVERGESLAGEN | - | Claim klopt niet: README linkt naar 4 PDF's en alle 4 staan in docs/. Afgedekt door F28 (D2). |
@@ -71,7 +71,7 @@ Correcties op de opdracht (door Ted akkoord bevonden vóór de start):
 ## Afwijkingen t.o.v. audit
 - Webserver (F08, F13, F15, F19, F23, F24) in één commit: het is één herschreven request-pipeline (bron → selectie → rendering → invoer); per bevinding is er een eigen test. F15 is uit fase 6 naar voren gehaald om tests nooit naar templates/map_content.html te laten schrijven.
 - F15: iframe srcdoc i.p.v. {{ map_html|safe }} in een div (de kaart is een volledig HTML-document; zo blijft hij geïsoleerd en geldig).
-- Tijdelijk: ruff sluit de nog niet herschreven legacy-scripts uit (webserver.py, ack.py, uplinks.py, read-json.py) en negeert E501 in de legacy send-code van configure-using-downlinks.py. Wordt opgeheven zodra die bestanden in fase 4-6 herschreven zijn.
+- (Opgeheven in F30) Tijdelijk sloot ruff de legacy-scripts uit tot ze herschreven waren.
 
 ## Open vragen voor Ted
 - F11: maak in de TTN Console een alleen-lezen key (RIGHT_APPLICATION_TRAFFIC_READ) voor TTN_API_KEY en een aparte downlink-key voor TTN_DOWNLINK_API_KEY. Roteer de huidige key als export-env-vars.sh ooit gedeeld is.
@@ -85,3 +85,5 @@ Correcties op de opdracht (door Ted akkoord bevonden vóór de start):
 - 2026-11-15 18:25 CET Fase 2 afgerond
 - 2026-11-15 19:20 CET Fase 3 afgerond (fasecontrole: bitstring uit code/requirements; dry-run 18 downlinks = golden-kolom via tests/test_downlink_encoder.py::test_cli_dry_run_prints_golden_payload)
 - 2026-11-15 20:05 CET Fase 4 afgerond (fasecontrole: geen requests.-aanroep buiten oyster3/ttn.py; alle HTTP-tests gemockt incl. 401, timeout, lege respons)
+- 2026-11-15 20:50 CET Fase 5 afgerond (fasecontrole: GET / doet 0 HTTP-aanroepen en schrijft 0 bestanden)
+- 2026-11-15 21:00 CET Fase 6 afgerond (fasecontrole: app draait zonder schrijfrechten op templates/)

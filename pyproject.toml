@@ -6,8 +6,7 @@ requires-python = ">=3.10"
 [tool.ruff]
 line-length = 100
 target-version = "py310"
-# Temporary: legacy scripts are excluded until they are rewritten (audit fix phase 6).
-extend-exclude = ["json", "file", "data", "read-json.py"]
+extend-exclude = ["json", "file", "data"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B"]

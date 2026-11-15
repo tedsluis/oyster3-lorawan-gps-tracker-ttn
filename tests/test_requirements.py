@@ -38,3 +38,10 @@ def test_readme_documents_retention_and_scheduled_fetch():
     assert "24 hours on The Things Stack Sandbox" in readme
     assert "fetch.py" in readme and "OnCalendar=" in readme and "crontab" in readme
     assert "7 days" not in readme
+
+
+def test_no_duplicate_or_dead_scripts():
+    # Audit F30: read-json.py duplicated the webserver's snapshot selection
+    assert not (REPO / "read-json.py").exists()
+    for path in list(REPO.glob("*.py")) + list((REPO / "oyster3").glob("*.py")):
+        assert "except:" not in path.read_text(), path.name
