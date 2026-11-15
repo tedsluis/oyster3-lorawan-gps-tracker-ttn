@@ -48,7 +48,7 @@ Fase: 7 · Bezig met: - · Tests: 412 groen
 | A1 | 7 | OVERGESLAGEN | - | Claim klopt niet: README linkt naar 4 PDF's en alle 4 staan in docs/. Afgedekt door F28 (D2). |
 | F18 | 7 | KLAAR | tests/test_repository.py::test_license_is_mit, ::test_ci_runs_lint_and_tests_on_oldest_and_newest_python | LICENSE (MIT, Ted Sluis); .github/workflows/ci.yml: ruff check + format --check + pytest op Python 3.10 en 3.x, geen secrets. Testsuite bestond al (fase 1-6). |
 | F29 | 7 | TODO | | |
-| F03 | 7 | TODO | | Runbook; uitvoeren doet Ted. |
+| F03 | 7 | KLAAR | tests/test_repository.py::test_recovery_runbook_payloads_match_the_encoder | docs/DEVICE-RECOVERY.md (Engels): achtergrond, ack.py --history (even = oud script), dry-run DL1/DL9 tegen golden hex, versturen met nieuwe sequence, DL35 poll stats (810300000000), NbTrans/consumed_airtime in de Console, waarschuwing DL7/8/9. Uitvoeren: WACHT-OP-TED. |
 | A4 | 7 | TODO | | |
 | A5 | 7 | TODO | | |
 | 8 eindcontrole | 8 | TODO | | |
@@ -74,6 +74,7 @@ Correcties op de opdracht (door Ted akkoord bevonden vóór de start):
 - (Opgeheven in F30) Tijdelijk sloot ruff de legacy-scripts uit tot ze herschreven waren.
 
 ## Open vragen voor Ted
+- F03: voer docs/DEVICE-RECOVERY.md uit (eerst `python ack.py --history --hours 720`). Jij beslist en verstuurt.
 - F11: maak in de TTN Console een alleen-lezen key (RIGHT_APPLICATION_TRAFFIC_READ) voor TTN_API_KEY en een aparte downlink-key voor TTN_DOWNLINK_API_KEY. Roteer de huidige key als export-env-vars.sh ooit gedeeld is.
 
 ## Vervolg (buiten scope)
