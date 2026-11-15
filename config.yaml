@@ -92,11 +92,15 @@ config:
       value: 2 # 126 / 63
       byte: 6
       length: 1
+      min: 1
+      max: 8
     - name: 7 V1 Accelerometer wakeup count, 1-12= 80-960 ms, default 80 ms
       type: integer
       value: 1
       byte: 7
       length: 1
+      min: 1
+      max: 12
 
 # Downlink Port 2: Set After-Hours 1
   downlink2:
@@ -117,41 +121,57 @@ config:
       value: 0
       byte: 1
       length: 1
+      min: 0
+      max: 192
     - name: 2 End of after-hours period on Monday, LSb = 7m30s since 00:00 local time, setting to start time + 1 indicates a 7m30s after-hours period, set start time to 00:00 and end time to 24:00 to indicate the whole day is after-hours, default 0
       type: integer
       value: 0
       byte: 2
       length: 1
+      min: 0
+      max: 192
     - name: 3 Start of after-hours period on Tuesday, see above
       type: integer
       value: 0
       byte: 3
       length: 1
+      min: 0
+      max: 192
     - name: 4 End of after-hours period on Tuesday, see above
       type: integer
       value: 0
       byte: 4
       length: 1
+      min: 0
+      max: 192
     - name: 5 Start of after-hours period on Wednesday, see above
       type: integer
       value: 0
       byte: 5
       length: 1
+      min: 0
+      max: 192
     - name: 6 End of after-hours period on Wednesday, see above
       type: integer
       value: 0
       byte: 6
       length: 1
+      min: 0
+      max: 192
     - name: 7 Start of after-hours period on Thursday, see above
       type: integer
       value: 0
       byte: 7
       length: 1
+      min: 0
+      max: 192
     - name: 8 End of after-hours period on Thursday, see above
       type: integer
       value: 0
       byte: 8
       length: 1
+      min: 0
+      max: 192
 
 # Downlink Port 3: Set After-Hours 2
   downlink3:
@@ -172,31 +192,43 @@ config:
       value: 0
       byte: 1
       length: 1
+      min: 0
+      max: 192
     - name: 2 End of after-hours period on Friday, LSb = 7m30s since 00:00 local time, setting to start time + 1 indicates a 7m30s after-hours period, set start time, to 00:00 and end time to 24:00 to indicate the whole day is after-hours, default 0
       type: integer
       value: 0
       byte: 2
       length: 1
+      min: 0
+      max: 192
     - name: 3 Start of after-hours period on Saturday, see above
       type: integer
       value: 0
       byte: 3
       length: 1
+      min: 0
+      max: 192
     - name: 4 End of after-hours period on Saturday, see above
       type: integer
       value: 0
       byte: 4
       length: 1
+      min: 0
+      max: 192
     - name: 5 Start of after-hours period on Sunday, see above
       type: integer
       value: 0
       byte: 5
       length: 1
+      min: 0
+      max: 192
     - name: 6 End of after-hours period on Sunday, see above
       type: integer
       value: 0
       byte: 6
       length: 1
+      min: 0
+      max: 192
 
 # Downlink Port 4: Set Time Zone
   downlink4:
@@ -230,18 +262,24 @@ config:
       byte: 2
       bit: 6
       length: 3
+      min: 0
+      max: 6
     - name: 3.1 - 3.5 1-7= Monday-Sunday, or 1-31= Day of month (absolute date), local time
       type: integer
       value: 0
       byte: 3
       bit: 1
       length: 5
+      min: 0
+      max: 31
     - name: 3.6 - 4.1 1-12= January-December
       type: integer
       value: 0
       byte: 3
       bit: 6
       length: 4
+      min: 0
+      max: 12
     - name: 4.2 - 5.2 Offset from 00.00 local time, LSb = 15 mins, signed, can select hours in previous days like ‘02:00 on Friday before last Sunday of October local, time’ would need Offset = (2hr - 48hr) * 4 = -184
       type: signed-integer
       value: 0
@@ -254,18 +292,24 @@ config:
       byte: 5
       bit: 3
       length: 3
+      min: 0
+      max: 6
     - name: 5.6 - 6.2 1-7= Monday-Sunday, or 1-31= Day of month (absolute date), local time
       type: integer
       value: 0
       byte: 5
       bit: 6
       length: 5
+      min: 0
+      max: 31
     - name: 6.3 - 6.6 1-12= January-December
       type: integer
       value: 0
       byte: 6
       bit: 3
       length: 4
+      min: 0
+      max: 12
     - name: 6.7 - 7.7 Offset from 00:00 local DST, LSb = 15 mins, signed, can select hours in previous days like ’02:00 on Friday before last Sunday of April local DST’ would need Offset = (2hr - 48hr) * 4 = -184
       type: signed-integer
       value: 0
@@ -292,6 +336,7 @@ config:
       value: 131 # 129 + 2
       byte: 1
       length: 1
+      min: 45
     - name: 2 Max time to wait for fine GNSS fix, 1-127= 1-127 seconds, 129-255= 1-127 minutes, 0 or 128 disables, default 5 s
       type: integer
       value: 5
@@ -307,21 +352,29 @@ config:
       value: 100
       byte: 4
       length: 1
+      min: 25
+      max: 100
     - name: 5 Required position accuracy for valid GNSS, 5-100= 5-100 m, default 75 m
       type: integer
       value: 75
       byte: 5
       length: 1
+      min: 5
+      max: 100
     - name: 6 Required speed accuracy for valid GNSS, 8-55= 2.88-19.8 km/h, default 10 km/h
       type: integer
       value: 20
       byte: 6
       length: 1
+      min: 8
+      max: 55
     - name: 7 Discard first N GNSS points to allow solution to settle, 0-32= 0-32 positions, default 3
       type: integer
       value: 3
       byte: 7
       length: 1
+      min: 0
+      max: 32
 
 # Downlink Port 6: Set GNSS Parameters 2
   downlink6:
@@ -363,7 +416,7 @@ config:
       byte: 5
       length: 1
     - name: 6.0 - 6.4 Satellite detection margin adjustment, signed, -16-15= -16-15 dB, >=0 requires stronger signal, <0 allows weaker signal, 0 is default
-      type: integer
+      type: signed-integer
       value: 0
       byte: 6
       bit: 0
@@ -375,7 +428,7 @@ config:
       bit: 5
       length: 1
     - name: 6.6 - 6.7 Reserved, set to zero
-      type: boolean
+      type: integer
       value: 0
       byte: 6
       bit: 6
@@ -441,6 +494,7 @@ config:
       value: 70B3D57050000000H
       byte: 1
       length: 8
+      endian: big
 
 # Downlink Port 9: Set Advanced LoRaWAN Options
   downlink9:
@@ -467,6 +521,8 @@ config:
       byte: 2
       bit: 0
       length: 2
+      min: 0
+      max: 2
     - name: 2.2 - 2.3 Reserved, set to zero
       type: integer
       value: 0
@@ -479,6 +535,8 @@ config:
       byte: 2
       bit: 4
       length: 4
+      min: 1
+      max: 15
     - name: 3.0 - 3.3 Initial MaxCount0, sets uplinks between Rejoin0 attempts in LoRaWAN 1.1 OTAA, uplink interval equals 2^(4+MaxCount0), default 15
       type: integer
       value: 15
@@ -504,7 +562,7 @@ config:
       bit: 4
       length: 4
     - name: 5 Maximum Tx power limit, signed, -128-127= -128 to 127 dBm EIRP, default 127 (no limit)
-      type: integer
+      type: signed-integer
       value: 127
       byte: 5
       length: 1
@@ -534,14 +592,18 @@ config:
       byte: 1
       bit: 0
       length: 2
+      min: 0
+      max: 2
     - name: 1.2 - 1.3 Inactivity Indicator Alarm fix on clear, see above
       type: integer
       value: 0
       byte: 1
       bit: 2
       length: 2
+      min: 0
+      max: 2
     - name: 1.4 - 1.7 Reserved, set to zero
-      type: boolean
+      type: integer
       value: 0000B
       byte: 1
       bit: 4
@@ -571,6 +633,7 @@ config:
       value: 1
       byte: 6
       length: 1
+      min: 1
     - name: 7.0 - 7.4 Extra end-of-trip heartbeats, default 0
       type: integer
       value: 0
@@ -603,51 +666,71 @@ config:
       value: 0
       byte: 1
       length: 1
+      min: 0
+      max: 192
     - name: 2 Local time* of scheduled upload time 2, see above
       type: integer
       value: 0
       byte: 2
       length: 1
+      min: 0
+      max: 192
     - name: 3 Local time* of scheduled upload time 3, see above
       type: integer
       value: 0
       byte: 3
       length: 1
+      min: 0
+      max: 192
     - name: 4 Local time* of scheduled upload time 4, see above
       type: integer
       value: 0
       byte: 4
       length: 1
+      min: 0
+      max: 192
     - name: 5 Local time* of scheduled upload time 5, see above
       type: integer
       value: 0
       byte: 5
       length: 1
+      min: 0
+      max: 192
     - name: 6 Local time* of scheduled upload time 6, see above
       type: integer
       value: 0
       byte: 6
       length: 1
+      min: 0
+      max: 192
     - name: 7 Local time* of scheduled upload time 7, see above
       type: integer
       value: 0
       byte: 7
       length: 1
+      min: 0
+      max: 192
     - name: 8 Local time* of scheduled upload time 8, see above
       type: integer
       value: 0
       byte: 8
       length: 1
+      min: 0
+      max: 192
     - name: 9 Local time* of scheduled upload time 9, see above
       type: integer
       value: 0
       byte: 9
       length: 1
+      min: 0
+      max: 192
     - name: 10 Local time* of scheduled upload time 10, see above
       type: integer
       value: 0
       byte: 10
       length: 1
+      min: 0
+      max: 192
 
 # Downlink Port 12: Set Scheduled Upload Parameters (continued)
   downlink12:
@@ -668,11 +751,15 @@ config:
       value: 0
       byte: 1
       length: 1
+      min: 0
+      max: 192
     - name: 2 Local time* of scheduled upload time 12, see above
       type: integer
       value: 0
       byte: 2
       length: 1
+      min: 0
+      max: 192
 
 # Downlink Port 30: Set Device Statistics Parameters
   downlink30:
@@ -716,7 +803,7 @@ config:
       bit: 1
       length: 1
     - name: 6.2 - 6.7 Reserved, send as zero
-      type: boolean
+      type: integer
       value: 0
       byte: 6
       bit: 2
@@ -773,7 +860,7 @@ config:
       bit: 5
       length: 1
     - name: 1.6 - 1.7 Reserved, set to zero
-      type: boolean
+      type: integer
       value: 0
       byte: 1
       bit: 6
@@ -798,17 +885,23 @@ config:
       value: 7
       byte: 1
       length: 1
+      min: 2
+      max: 32
     - name: 2 Accelerometer wakeup count, 1-100= 10-1000 ms, default 100 ms
       type: integer
       value: 10
       byte: 2
       length: 1
+      min: 1
+      max: 100
     - name: 3.0 - 3.3 Accelerometer sampling rate (Hz), 0-4= {1, 10, 25, 50, 100}, default 1 (10 Hz)
       type: integer
       value: 1
       byte: 3
       bit: 0
       length: 4
+      min: 0
+      max: 4
     - name: 3.4 - 3.7 Reserved, set to zero
       type: integer
       value: 0000B
@@ -858,7 +951,7 @@ config:
       bit: 1
       length: 1
     - name: 1.2 - 1.7 Reserved, set to zero
-      type: boolean
+      type: integer
       value: 0
       byte: 1
       bit: 2

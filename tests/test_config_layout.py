@@ -6,6 +6,7 @@ from oyster3.downlinks import (
     name_offset,
     validate_config,
     validate_layout,
+    validate_types,
 )
 from tests.conftest import REPO
 
@@ -49,3 +50,25 @@ def test_validator_detects_wrong_offset_overlap_and_gap():
     assert "name says bit 9" in problems
     assert "overlaps" in problems
     assert "not covered" in problems
+
+
+def test_validator_detects_inconsistent_types():
+    fields = [
+        {"name": "5 Maximum Tx power limit, signed", "type": "integer", "byte": 5, "length": 1},
+        {"name": "6.6 - 6.7 Reserved", "type": "boolean", "byte": 6, "bit": 6, "length": 2},
+        {"name": "7 Something", "type": "float", "byte": 7, "length": 1},
+        {"name": "1.0 Flag", "type": "boolean", "byte": 1, "bit": 0, "length": 1, "endian": "big"},
+    ]
+    problems = " ".join(validate_types(9, fields))
+    assert "use type signed-integer" in problems
+    assert "boolean fields must be 1 bit" in problems
+    assert "unknown type" in problems
+    assert "endian only applies" in problems
+
+
+def test_signed_reserved_and_joineui_fields_are_typed(config):
+    by_name = {(port, f["name"][:9]): f for port, fields in config.items() for f in fields}
+    assert by_name[(6, "6.0 - 6.4")]["type"] == "signed-integer"
+    assert by_name[(9, "5 Maximum")]["type"] == "signed-integer"
+    assert by_name[(34, "1.2 - 1.7")]["type"] == "integer"
+    assert by_name[(8, "1 - 8 Joi")]["endian"] == "big"

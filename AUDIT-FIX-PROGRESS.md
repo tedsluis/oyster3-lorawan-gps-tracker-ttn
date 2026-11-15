@@ -19,7 +19,7 @@ Fase: 3 · Bezig met: - · Tests: 104 groen
 | F31 | 2 | KLAAR | tests/test_webserver_decoding.py | Batterij in volt (LSb 25 mV), comment gecorrigeerd. |
 | F08 (decoder) | 2 | KLAAR | tests/test_uplinks.py::test_only_gnss_uplinks_are_positions | decode_uplink geeft per poort een type; POSITION_PORTS = {1,4,33}. Plotten volgt in fase 6. |
 | F04 | 3 | KLAAR | tests/test_config_layout.py | Validator (naam-offset = byte/bit/length, geen overlap, geen gaten, lengte = spec) + 8 correcties in config.yaml (DL4 ×3, DL6, DL10 byte 6 gesplitst (waarde 1), DL30, DL34, DL35). Validator vond vóór de fix 19 problemen, alle binnen de auditbevindingen. |
-| A2 | 3 | TODO | | |
+| A2 | 3 | KLAAR | tests/test_config_layout.py::test_validator_detects_inconsistent_types, ::test_signed_reserved_and_joineui_fields_are_typed | DL6 6.0-6.4 en DL9 byte 5 → signed-integer (DL4 was al goed); 5 meerbits reserved-velden boolean → integer; min/max waar de spec een bereik noemt; endian: big bij DL8 JoinEUI. Validator controleert types. |
 | F26 | 3 | TODO | | |
 | F01 | 3 | TODO | | |
 | F02 | 3 | TODO | | |

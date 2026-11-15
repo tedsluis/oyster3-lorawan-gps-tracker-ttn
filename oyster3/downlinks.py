@@ -15,6 +15,7 @@ SPEC_LENGTHS = {
     30: 7, 31: 2, 32: 4, 33: 1, 34: 2, 35: 6,
 }
 VALID_PORTS = tuple(SPEC_LENGTHS)
+FIELD_TYPES = ("integer", "signed-integer", "boolean")
 
 _OFFSET = re.compile(r"^(\d+)(?:\.(\d))?(?:\s*-\s*(\d+)(?:\.(\d))?)?\s")
 
@@ -98,6 +99,30 @@ def validate_layout(port, fields):
     return problems
 
 
+def validate_types(port, fields):
+    """Return a list of problems with field types and attributes of one downlink."""
+    problems = []
+    for field in fields:
+        name = field["name"]
+        label = f"downlink{port}: {name[:40]!r}"
+        field_type = field.get("type")
+        _, size = field_span(field)
+        if field_type not in FIELD_TYPES:
+            problems.append(f"{label}: unknown type {field_type!r}")
+        if field_type == "boolean" and size != 1:
+            problems.append(f"{label}: boolean fields must be 1 bit, use integer for {size} bits")
+        if "signed" in name and field_type != "signed-integer":
+            problems.append(f"{label}: the spec says signed, use type signed-integer")
+        if field.get("endian", "little") not in ("little", "big"):
+            problems.append(f"{label}: endian must be 'little' or 'big'")
+        if field.get("endian") == "big" and field.get("bit") is not None:
+            problems.append(f"{label}: endian only applies to whole-byte fields")
+        low, high = field.get("min"), field.get("max")
+        if low is not None and high is not None and low > high:
+            problems.append(f"{label}: min {low} is greater than max {high}")
+    return problems
+
+
 def validate_config(config):
     problems = []
     missing = sorted(set(SPEC_LENGTHS) - set(config))
@@ -105,4 +130,5 @@ def validate_config(config):
         problems.append(f"downlinks missing from config: {missing}")
     for port, fields in config.items():
         problems.extend(validate_layout(port, fields))
+        problems.extend(validate_types(port, fields))
     return problems
