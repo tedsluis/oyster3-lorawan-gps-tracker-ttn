@@ -2,7 +2,7 @@
 Branch: fix/audit-2026-11 · Basiscommit: 358adea · Laatst bijgewerkt: 2026-11-15 17:50 CET
 
 ## Huidige stand
-Fase: 8 · Bezig met: 8 eindcontrole · Tests: zie eindcontrole
+Fase: 8 (afgerond) · Bezig met: - · Tests: 416 groen
 
 ## Items
 | ID | Fase | Status | Test(s) | Notitie |
@@ -51,9 +51,50 @@ Fase: 8 · Bezig met: 8 eindcontrole · Tests: zie eindcontrole
 | F03 | 7 | KLAAR | tests/test_repository.py::test_recovery_runbook_payloads_match_the_encoder | docs/DEVICE-RECOVERY.md (Engels): achtergrond, ack.py --history (even = oud script), dry-run DL1/DL9 tegen golden hex, versturen met nieuwe sequence, DL35 poll stats (810300000000), NbTrans/consumed_airtime in de Console, waarschuwing DL7/8/9. Uitvoeren: WACHT-OP-TED. |
 | A4 | 7 | KLAAR | tests/test_readme.py::test_readme_explains_acknowledgements_and_storage_delay | README: ack één keer bij de eerstvolgende uplink (spec §3.4); verloren ack → gedrag controleren (DL35) of opnieuw sturen met nieuwe sequence. Ook F22-notitie (Storage Integration niet realtime). |
 | A5 | 7 | WACHT-OP-TED | - | map-example.png toont de oude UI (en mogelijk echte locaties). Nieuwe screenshot kan ik niet maken. |
-| 8 eindcontrole | 8 | TODO | | |
+| 8 eindcontrole | 8 | KLAAR | volledige suite in schone venv | Schone venv: 416 passed in 7.40s; ruff check + format --check groen; dry-run 18/18 = golden; git ls-files zonder json/file/data/export-env-vars.sh; 0 treffers op tenant/device/app/DevEUI/DevAddr; review door verse subagent: 2 terechte punten verwerkt (F12-paginering, F16-bereiken). |
 
 Statussen: TODO · BEZIG · KLAAR · OVERGESLAGEN (met reden) · WACHT-OP-TED
+
+## Traceertabel (eindcontrole)
+| ID | Commit(s) | Test(s) | Status |
+|----|-----------|---------|--------|
+| F01 | 0879b94, ce58486, 8d8a4fd | tests/test_downlink_encoder.py (golden 18, sequence, round-trip ×90, CLI dry-run 18) | KLAAR |
+| F02 | ce58486 | tests/test_downlink_encoder.py::test_dl30_multi_byte_fields_are_little_endian, ::test_dl7_channel_mask_is_litt | KLAAR |
+| F03 | a12077c | tests/test_repository.py::test_recovery_runbook_payloads_match_the_encoder | KLAAR |
+| F04 | 8cf0a82 | tests/test_config_layout.py | KLAAR |
+| F05 | 48a4068 | tests/test_uplinks.py, tests/test_webserver_decoding.py | KLAAR |
+| F06 | bb0ed75 | tests/test_webserver_settings.py | KLAAR |
+| F07 | ce58486 | tests/test_requirements.py | KLAAR |
+| F08 | 48a4068, 558def1 | tests/test_uplinks.py::test_only_gnss_uplinks_are_positions; tests/test_webserver.py::test_only_position_uplin | KLAAR |
+| F09 | 113150d | tests/test_store.py, tests/test_fetch_and_import.py, tests/test_requirements.py::test_readme_documents_retenti | KLAAR |
+| F10 | 0c86e85 | tests/test_requirements.py | KLAAR |
+| F11 | deef916 | tests/test_ttn.py::test_reading_and_sending_use_separate_keys, ::test_example_environment_file_has_placeholder | KLAAR |
+| F12 | b1c9a82, 6a84d0d | tests/test_ttn.py::test_wait_for_ack_*, ::test_find_ack_matches_sequence_and_port, tests/test_ack_cli.py | KLAAR |
+| F13 | b1c9a82, 558def1 | tests/test_webserver.py::test_get_makes_no_http_calls_and_writes_no_files, ::test_refresh_* | KLAAR |
+| F14 | b1c9a82 | tests/test_ttn.py (401, timeout, connection error, 403, lege respons), tests/test_send_path.py, tests/test_ack | KLAAR |
+| F15 | 558def1 | tests/test_webserver.py::test_map_is_not_written_to_templates, ::test_concurrent_requests_get_their_own_map, : | KLAAR |
+| F16 | 15b995d, 50676bb | tests/test_downlink_validation.py | KLAAR |
+| F17 | b1c9a82 | tests/test_ttn.py::test_urls_are_built_from_console_and_region, ::test_no_hardcoded_tenant_host_outside_the_cl | KLAAR |
+| F18 | f8cb9a3 | tests/test_repository.py::test_license_is_mit, ::test_ci_runs_lint_and_tests_on_oldest_and_newest_python | KLAAR |
+| F19 | 558def1 | tests/test_webserver.py::test_local_day_selection_uses_the_app_timezone, tests/test_timeutil.py (zomertijd, mi | KLAAR |
+| F20 | 8fd4166 | tests/test_uplinks.py::test_port3_spec_example, ::test_port31_spec_example | KLAAR |
+| F21 | b1c9a82 | tests/test_ttn.py::test_parse_storage_response* (7 varianten + API-fout + ongeldige JSON) | KLAAR |
+| F22 | b1c9a82, b177fff, 6a84d0d | tests/test_ttn.py::test_wait_for_ack_stops_after_match_and_only_asks_for_new_uplinks | KLAAR |
+| F23 | 558def1 | tests/test_webserver.py::test_failed_fix_is_a_cached_marker_outside_the_route | KLAAR |
+| F24 | 558def1 | tests/test_webserver.py::test_bad_form_input_falls_back_with_a_message, ::test_template_uses_required_attribut | KLAAR |
+| F25 | 157db10, b1c9a82 | tests/test_cli_arguments.py | KLAAR |
+| F26 | 23308c3 | tests/test_config_defaults.py | KLAAR |
+| F27 | b177fff | tests/test_readme.py (dry-run-blokken 18/18 = echte uitvoer, geen verouderde/verkeerd gespelde tekst, relatiev | KLAAR |
+| F28 | b177fff (PDF-verwijdering in f8cb9a3) | tests/test_readme.py::test_readme_links_official_docs_instead_of_pdfs | KLAAR |
+| F29 | b177fff | tests/test_readme.py::test_readme_documents_privacy_and_cdns, tests/test_store.py::test_store_files_are_privat | KLAAR |
+| F30 | e53eaa0 | tests/test_requirements.py::test_no_duplicate_or_dead_scripts + ruff (F401/F841/E722) over de hele repo | KLAAR |
+| F31 | 48a4068 | tests/test_webserver_decoding.py | KLAAR |
+| A1 | - | - | OVERGESLAGEN |
+| A2 | c7b2635 | tests/test_config_layout.py::test_validator_detects_inconsistent_types, ::test_signed_reserved_and_joineui_fie | KLAAR |
+| A3 | 17dc366 | tests/test_send_path.py | KLAAR |
+| A4 | b177fff | tests/test_readme.py::test_readme_explains_acknowledgements_and_storage_delay | KLAAR |
+| A5 | - | - | WACHT-OP-TED |
+| A6 | 157db10 | tests/test_cli_arguments.py::test_configure_sequence_override_is_used_in_payload, tests/test_downlink_encoder. | KLAAR |
 
 ## Beslissingen
 D1 MIT (Ted Sluis) · D2 PDF's uit de werkboom, officiële links · D3 SQLite `data/uplinks.sqlite3` · D4 `Europe/Amsterdam` via `APP_TIMEZONE` · D5 Python ≥ 3.10 · D6 niet pushen · D7 push-integratie buiten scope · D8 CDN's alleen documenteren.
@@ -94,3 +135,4 @@ Correcties op de opdracht (door Ted akkoord bevonden vóór de start):
 - 2026-11-15 20:50 CET Fase 5 afgerond (fasecontrole: GET / doet 0 HTTP-aanroepen en schrijft 0 bestanden)
 - 2026-11-15 21:00 CET Fase 6 afgerond (fasecontrole: app draait zonder schrijfrechten op templates/)
 - 2026-11-15 21:40 CET Fase 7 afgerond (fasecontrole: relatieve README-links bestaan; geen TODO of 'Byte Array: 02' in de README)
+- 2026-11-15 22:30 CET Fase 8 afgerond (eindcontrole; traceertabel ingevuld)
