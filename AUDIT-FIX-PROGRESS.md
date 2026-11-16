@@ -110,6 +110,7 @@ Correcties op de opdracht (door Ted akkoord bevonden vóór de start):
 8. Python 3.10: eigen timestampparser (geen `Z`/nanoseconden in `fromisoformat`); lokaal alleen 3.15 beschikbaar, 3.10 wordt in CI getest.
 
 ## Afwijkingen t.o.v. audit
+- 2026-11-16, besluit van Ted (wijzigt D2/F28): drie PDF's van Digital Matter staan weer in docs/ (configuration and usage guide, datasheet 2024, GPS battery-powered LoRa tracker; inhoud identiek aan d0441cc, guide onder de latere naam zonder spatie). De Integration-spec blijft alleen extern gelinkt. Copyright-risico (audit F28) bewust geaccepteerd. Test: test_readme_links_official_docs_and_only_the_allowed_local_pdfs.
 - Review 8.5: F16 dwong gesplitste bereiken (1-127 / 129-255 e.d.) niet af en de README beweerde te veel. Toegevoegd: `allowed:` in config.yaml (DL1 heartbeat, DL5 coarse fix, DL6 byte 1 en bytes 8-9, DL10 byte 3) + validatie + tests; README-tekst precies gemaakt (DL35 poll period hangt af van poll count en wordt niet gecontroleerd).
 - Review 8.5: de F22-fix (limit=100, oudste eerst) liet ack.py een recente ack missen bij >100 uplinks in het venster. Opgelost met paginering (after schuift door per pagina); test test_wait_for_ack_pages_past_many_uplinks.
 - F28: de git rm van docs/*.pdf stond al gestaged en is meegegaan in commit f8cb9a3 (F18). Niet teruggedraaid (geen history-rewrite); de README-kant van F28 zit in de F27-commit.

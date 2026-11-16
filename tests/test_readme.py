@@ -44,7 +44,6 @@ def test_readme_has_no_stale_or_misspelled_content():
         "Streeetmap",
         "comfirmed",
         "formating",
-        "docs/Oyster3",
         "pip install bitstring",
         "APLICATION",
         "7 days",
@@ -70,7 +69,15 @@ def test_readme_documents_privacy_and_cdns():
         assert text in section
 
 
-def test_readme_links_official_docs_instead_of_pdfs():
-    # Audit F28
+def test_readme_links_official_docs_and_only_the_allowed_local_pdfs():
+    # Audit F28, revised: three Digital Matter PDFs are kept locally on purpose; the
+    # Integration spec is only linked at its official location.
     assert "validated against the *Oyster 3 LoRaWAN Integration* spec, revision 1.3" in README
-    assert not list((REPO / "docs").glob("*.pdf"))
+    allowed = {
+        "Oyster3-LoRaWAN-Configuration-and-Usage-Guide-Digital-Matter.pdf",
+        "Oyster3-LoRaWAN-Datasheet-Digital-Matter-2024.pdf",
+        "Oyster3-LoRaWAN-GPS-Battery-Powered-LoRa-Tracker.pdf",
+    }
+    assert {path.name for path in (REPO / "docs").glob("*.pdf")} == allowed
+    for name in allowed:
+        assert f"(./docs/{name})" in README
