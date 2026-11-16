@@ -203,6 +203,12 @@ The code was validated against the *Oyster 3 LoRaWAN Integration* spec, revision
 * Decoding the Oyster 3 LoRaWAN uplink: https://support.digitalmatter.com/oyster3-lorawan/decoding-the-oyster-3-lorawan%C2%AE-uplink
 * Device recovery after a faulty configuration: [docs/DEVICE-RECOVERY.md](./docs/DEVICE-RECOVERY.md)
 
+Local copies of Digital Matter documents (© Digital Matter; check the official sources above for newer versions):
+
+* [Oyster 3 LoRaWAN configuration and usage guide](./docs/Oyster3-LoRaWAN-Configuration-and-Usage-Guide-Digital-Matter.pdf)
+* [Oyster 3 LoRaWAN datasheet 2024](./docs/Oyster3-LoRaWAN-Datasheet-Digital-Matter-2024.pdf)
+* [Oyster 3 LoRaWAN GPS battery-powered LoRa tracker](./docs/Oyster3-LoRaWAN-GPS-Battery-Powered-LoRa-Tracker.pdf)
+
 ## The Things Network
 
 * https://\<CONSOLE_NAME\>.\<REGION\>.cloud.thethings.industries/console/applications/<APPLICATION>/devices/<DEVICE>/data
